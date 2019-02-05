@@ -1,0 +1,32 @@
+{
+    "name": "bokt/flarum-horizon",
+    "description": "Adds Laravel Horizon to Flarum",
+    "keywords": [
+        "extension",
+        "flarum", "bokt",
+        "queue", "horizon"
+    ],
+    "type": "extension",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Daniël Klabbers",
+            "email": "daniel@klabbers.email",
+            "homepage": "http://luceos.com"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/bokt/flarum-queue/issues",
+        "source": "https://github.com/bokt/flarum-queue"
+    },
+    "require": {
+        "flarum/core": "^0.1.0-beta.9",
+        "bokt/flarum-queue": "*",
+        "laravel/horizon": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Bokt\\Horizon\\": "src/"
+        }
+    }
+}
