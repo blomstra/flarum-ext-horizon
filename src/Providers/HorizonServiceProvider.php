@@ -18,6 +18,8 @@ class HorizonServiceProvider extends Provider
         }
         $this->configure();
         $this->registerCommands();
+        $this->registerServices();
+        $this->registerQueueConnectors();
     }
 
     protected function registerRoutes()
