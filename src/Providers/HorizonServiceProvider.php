@@ -13,7 +13,11 @@ class HorizonServiceProvider extends Provider
 {
     public function register()
     {
+        if (! defined('HORIZON_PATH')) {
+            define('HORIZON_PATH', realpath(base_path('vendor/laravel/horizon')));
+        }
         $this->configure();
+        $this->registerCommands();
     }
 
     protected function registerRoutes()

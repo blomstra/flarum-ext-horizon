@@ -2,9 +2,13 @@
 
 namespace Bokt\Horizon;
 
+use Bokt\Queue\Extend\EnableQueues;
 use Flarum\Extend\Frontend;
 
 return [
+    new EnableQueues,
+    (new Extend\Provider)
+        ->add(Providers\HorizonServiceProvider::class),
     (new Frontend('admin'))
         ->route('horizon/api/stats', 'horizon.api.stats')
         ->route('horizon/api/workload', 'horizon.api.workload')

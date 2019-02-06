@@ -6,7 +6,7 @@
         "flarum", "bokt",
         "queue", "horizon"
     ],
-    "type": "extension",
+    "type": "flarum-extension",
     "license": "MIT",
     "authors": [
         {
@@ -27,6 +27,19 @@
     "autoload": {
         "psr-4": {
             "Bokt\\Horizon\\": "src/"
+        }
+    },
+    "extra": {
+        "flarum-extension": {
+            "title": "Horizon",
+            "icon": {
+                "image": "https://raw.githubusercontent.com/laravel/horizon/2.0/resources/img/horizon.svg",
+                "backgroundColor": "#EBF1FD",
+                "color": "#3a98d0",
+                "backgroundSize": "90%",
+                "backgroundRepeat": "no-repeat",
+                "backgroundPosition": "center"
+            }
         }
     }
 }
