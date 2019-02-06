@@ -2,25 +2,29 @@
 
 namespace Bokt\Horizon;
 
+use Bokt\Horizon\Http;
 use Bokt\Queue\Extend\EnableQueues;
-use Flarum\Extend\Frontend;
+use Flarum\Extend\Routes;
 
 return [
     new EnableQueues,
     (new Extend\Provider)
         ->add(Providers\HorizonServiceProvider::class),
-    (new Frontend('admin'))
-        ->route('horizon/api/stats', 'horizon.api.stats')
-        ->route('horizon/api/workload', 'horizon.api.workload')
-        ->route('horizon/api/masters', 'horizon.api.masters')
-        ->route('horizon/api/monitoring', 'horizon.api.monitoring')
-        ->route('horizon/api/monitoring/{tag}', 'horizon.api.monitoring.tag')
-        ->route('horizon/api/metrics/jobs', 'horizon.api.metrics.jobs')
-        ->route('horizon/api/metrics/jobs/{id}', 'horizon.api.metrics.job')
-        ->route('horizon/api/metrics/queues', 'horizon.api.metrics.queues')
-        ->route('horizon/api/metrics/queues/{id}', 'horizon.api.metrics.queue')
-        ->route('horizon/api/jobs/recent', 'horizon.api.jobs.recent')
-        ->route('horizon/api/jobs/failed', 'horizon.api.jobs.failed')
-        ->route('horizon/api/jobs/failed/{id}', 'horizon.api.jobs.fail')
-        ->route('horizon/.+', 'horizon.home')
+    (new Routes('admin'))
+//        ->get('horizon/api/stats', 'horizon.stats.index', )
+//        ->get('horizon/api/workload', 'horizon.workload.index')
+//        ->get('horizon/api/masters', 'horizon.masters.index')
+//        ->get('horizon/api/monitoring', 'horizon.monitoring.index')
+//        ->post('horizon/api/monitoring', 'horizon.monitoring.store')
+//        ->get('horizon/api/monitoring/{tag}', 'horizon.monitoring-tag.paginate')
+//        ->delete('horizon/api/monitoring/{tag}', 'horizon.monitoring-tag.destroy')
+//        ->get('horizon/api/metrics/jobs', 'horizon.jobs-metrics.index')
+//        ->get('horizon/api/metrics/jobs/{id}', 'horizon.jobs-metrics.show')
+//        ->get('horizon/api/metrics/queues', 'horizon.queues-metrics.index')
+//        ->get('horizon/api/metrics/queues/{id}', 'horizon.queues-metrics.show')
+//        ->get('horizon/api/jobs/recent', 'horizon.recent-jobs.index')
+//        ->get('horizon/api/jobs/failed', 'horizon.failed-jobs.index')
+//        ->get('horizon/api/jobs/failed/{id}', 'horizon.failed-jobs.show')
+//        ->post('horizon/api/jobs/retry/{id}', 'horizon.retry-jobs.show')
+        ->get('/horizon/{view:.*}', 'horizon.index', Http\Home::class)
 ];

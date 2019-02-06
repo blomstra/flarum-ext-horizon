@@ -6,6 +6,7 @@ use Flarum\Console\Event\Configuring;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\View\Factory;
+use Laravel\Horizon\Horizon;
 use Laravel\Horizon\HorizonServiceProvider as Provider;
 use Laravel\Horizon\Console;
 
@@ -41,7 +42,14 @@ class HorizonServiceProvider extends Provider
 
         /** @var Repository $repository */
         $repository = $this->app->make(Repository::class);
+
+        $flarumConfig = $this->app->make('flarum.config');
+
+        $config = array_merge($config, $flarumConfig['queue'] ?? []);
+
         $repository->set(['horizon' => $config]);
+
+//        Horizon::use($config['use']);
     }
 
     protected function registerCommands()
