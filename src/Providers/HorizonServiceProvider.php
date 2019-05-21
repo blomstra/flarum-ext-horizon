@@ -21,13 +21,14 @@ class HorizonServiceProvider extends Provider
             define('HORIZON_PATH', realpath(base_path('vendor/laravel/horizon')));
         }
 
+        require_once __DIR__ . '/../helpers.php';
+
         $this->configure();
 
         $this->initRedis();
         $this->registerCommands();
         $this->registerServices();
 
-        $this->app->bind(JobRepository::class, RedisJobRepository::class);
         $this->registerQueueConnectors();
     }
 
