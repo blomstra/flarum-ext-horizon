@@ -4,6 +4,7 @@ namespace Bokt\Horizon\Http;
 
 use Flarum\Frontend\Frontend;
 use Illuminate\Contracts\View\Factory;
+use Laravel\Horizon\Horizon;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -26,13 +27,13 @@ class Home implements RequestHandlerInterface
         $this->frontend = $frontend;
     }
 
-    /**
-     * Handles a request and produces a response.
-     *
-     * May call other collaborating code to generate the response.
-     */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        return new HtmlResponse($this->view->make('horizon::app')->render());
+        return new HtmlResponse($this->view->make('horizon::layout', [
+            'cssFile' => 'app.css',
+            'horizonScriptVariables' => [
+                'path' => 'admin/horizon'
+            ],
+        ])->render());
     }
 }

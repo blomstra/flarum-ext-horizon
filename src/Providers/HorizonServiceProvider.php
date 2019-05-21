@@ -2,11 +2,14 @@
 
 namespace Bokt\Horizon\Providers;
 
+use Bokt\Horizon\Repositories\RedisJobRepository;
 use Flarum\Console\Event\Configuring;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Contracts\View\Factory;
-use Laravel\Horizon\Horizon;
+use Illuminate\Contracts\View\Factory as View;
+use Illuminate\Contracts\Redis\Factory as Redis;
+use Illuminate\Redis\RedisServiceProvider;
+use Laravel\Horizon\Contracts\JobRepository;
 use Laravel\Horizon\HorizonServiceProvider as Provider;
 use Laravel\Horizon\Console;
 
@@ -17,10 +20,21 @@ class HorizonServiceProvider extends Provider
         if (! defined('HORIZON_PATH')) {
             define('HORIZON_PATH', realpath(base_path('vendor/laravel/horizon')));
         }
+
         $this->configure();
+
+        $this->initRedis();
         $this->registerCommands();
         $this->registerServices();
+
+        $this->app->bind(JobRepository::class, RedisJobRepository::class);
         $this->registerQueueConnectors();
+    }
+
+    protected function initRedis()
+    {
+        $this->app->register(RedisServiceProvider::class);
+        $this->app->alias('redis', Redis::class);
     }
 
     protected function registerRoutes()
@@ -31,9 +45,9 @@ class HorizonServiceProvider extends Provider
     protected function registerResources()
     {
         /** @var Factory $view */
-        $view = $this->app->make(Factory::class);
+        $view = $this->app->make(View::class);
 
-        $view->addNamespace('horizon', base_path('vendor/laravel/horizon/resources/views'));
+        $view->addNamespace('horizon', __DIR__ . '/../../resources/views');
     }
 
     protected function configure()
@@ -48,6 +62,32 @@ class HorizonServiceProvider extends Provider
         $config = array_merge($config, $flarumConfig['queue'] ?? []);
 
         $repository->set(['horizon' => $config]);
+
+        if (! $repository->has('database.redis')) {
+            $repository->set('database.redis', [
+                'client' => 'predis',
+                'options' => [
+                    'cluster' => 'predis',
+                    'prefix' => 'flarum',
+                ],
+                'horizon' => [
+                    'host' => '127.0.0.1',
+                    'password' =>  null,
+                    'port' => 6379,
+                    'database' => 0,
+                ],
+            ]);
+        }
+
+        if (! $repository->has('queue.connections.horizon')) {
+            $repository->set('queue.connections.horizon', [
+                'driver' => 'redis',
+                'connection' => 'horizon',
+                'queue' => 'default',
+                'retry_after' => 90,
+                'block_for' => null,
+            ]);
+        }
 
 //        Horizon::use($config['use']);
     }

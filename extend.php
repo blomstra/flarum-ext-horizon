@@ -2,6 +2,7 @@
 
 namespace Bokt\Horizon;
 
+use Bokt\Horizon\Api;
 use Bokt\Horizon\Http;
 use Bokt\Queue\Extend\EnableQueues;
 use Flarum\Extend\Routes;
@@ -11,9 +12,9 @@ return [
     (new Extend\Provider)
         ->add(Providers\HorizonServiceProvider::class),
     (new Routes('admin'))
-//        ->get('horizon/api/stats', 'horizon.stats.index', )
-//        ->get('horizon/api/workload', 'horizon.workload.index')
-//        ->get('horizon/api/masters', 'horizon.masters.index')
+        ->get('/horizon/api/stats', 'horizon.stats.index', Api\Stats::class)
+        ->get('/horizon/api/workload', 'horizon.workload.index', Api\Workload::class)
+        ->get('/horizon/api/masters', 'horizon.masters.index', Api\Masters::class)
 //        ->get('horizon/api/monitoring', 'horizon.monitoring.index')
 //        ->post('horizon/api/monitoring', 'horizon.monitoring.store')
 //        ->get('horizon/api/monitoring/{tag}', 'horizon.monitoring-tag.paginate')
