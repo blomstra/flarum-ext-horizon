@@ -21,7 +21,6 @@
     },
     "require": {
         "flarum/core": "^0.1.0-beta.9",
-        "bokt/flarum-queue": "*",
         "laravel/horizon": "*",
         "illuminate/queue": "*",
         "illuminate/redis": "*"
