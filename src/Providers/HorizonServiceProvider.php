@@ -9,6 +9,7 @@ use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\View\Factory as View;
 use Illuminate\Contracts\Redis\Factory as Redis;
 use Illuminate\Redis\RedisServiceProvider;
+use Illuminate\Support\Arr;
 use Laravel\Horizon\Contracts\JobRepository;
 use Laravel\Horizon\HorizonServiceProvider as Provider;
 use Laravel\Horizon\Console;
@@ -54,13 +55,26 @@ class HorizonServiceProvider extends Provider
     protected function configure()
     {
         $config = include base_path('vendor/laravel/horizon/config/horizon.php');
+        Arr::set($config, 'path', 'admin/horizon');
+        Arr::set($config, 'use', 'horizon');
+        Arr::set($config, 'env', 'production');
+        Arr::set($config, 'environments', [
+            'production' => [
+                'connection' => 'redis',
+                'queue' => ['default'],
+                'balance' => 'balanced',
+                'processes' => 4,
+                'tries' => 3,
+            ]
+        ]);
 
         /** @var Repository $repository */
         $repository = $this->app->make(Repository::class);
 
         $flarumConfig = $this->app->make('flarum.config');
 
-        $config = array_merge($config, $flarumConfig['queue'] ?? []);
+        // Merge default config with the horizon key in config.php.
+        $config = array_merge($config, $flarumConfig['horizon'] ?? []);
 
         $repository->set(['horizon' => $config]);
 
@@ -77,6 +91,15 @@ class HorizonServiceProvider extends Provider
                     'port' => 6379,
                     'database' => 0,
                 ],
+            ]);
+        }
+
+        if (! $repository->has('database.redis.horizon')) {
+            $repository->set('database.redis.horizon', [
+                'host' => '127.0.0.1',
+                'password' =>  null,
+                'port' => 6379,
+                'database' => 0,
             ]);
         }
 
