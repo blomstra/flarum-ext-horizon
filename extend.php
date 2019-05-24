@@ -4,11 +4,9 @@ namespace Bokt\Horizon;
 
 use Bokt\Horizon\Api;
 use Bokt\Horizon\Http;
-use Bokt\Queue\Extend\EnableQueues;
 use Flarum\Extend\Routes;
 
 return [
-    new EnableQueues,
     (new Extend\Provider)
         ->add(Providers\HorizonServiceProvider::class),
     (new Routes('admin'))
