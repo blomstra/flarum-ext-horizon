@@ -28,6 +28,6 @@ return [
         ->get('/horizon/{view:.*}', 'horizon.index', Http\Home::class),
     new Extend\PublishAssets(
         base_path('vendor/laravel/horizon/public'),
-        public_path('vendor/horizon')
+        public_path('assets/horizon')
     )
 ];
