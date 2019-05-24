@@ -83,7 +83,7 @@ class HorizonServiceProvider extends Provider
                 'client' => 'predis',
                 'options' => [
                     'cluster' => 'predis',
-                    'prefix' => 'flarum',
+                    'prefix' => '',
                 ],
                 'horizon' => [
                     'host' => '127.0.0.1',
@@ -111,9 +111,8 @@ class HorizonServiceProvider extends Provider
                 'retry_after' => 90,
                 'block_for' => null,
             ]);
+            $repository->set('queue.default', 'horizon');
         }
-
-//        Horizon::use($config['use']);
     }
 
     protected function registerCommands()
