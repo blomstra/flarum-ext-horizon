@@ -25,5 +25,9 @@ return [
 //        ->get('horizon/api/jobs/failed', 'horizon.failed-jobs.index')
 //        ->get('horizon/api/jobs/failed/{id}', 'horizon.failed-jobs.show')
 //        ->post('horizon/api/jobs/retry/{id}', 'horizon.retry-jobs.show')
-        ->get('/horizon/{view:.*}', 'horizon.index', Http\Home::class)
+        ->get('/horizon/{view:.*}', 'horizon.index', Http\Home::class),
+    new Extend\PublishAssets(
+        base_path('vendor/laravel/horizon/public'),
+        public_path('vendor/horizon')
+    )
 ];
