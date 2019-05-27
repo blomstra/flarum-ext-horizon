@@ -10,17 +10,21 @@ use Illuminate\Contracts\View\Factory as View;
 use Illuminate\Contracts\Redis\Factory as Redis;
 use Illuminate\Redis\RedisServiceProvider;
 use Illuminate\Support\Arr;
-use Laravel\Horizon\Contracts\JobRepository;
 use Laravel\Horizon\HorizonServiceProvider as Provider;
 use Laravel\Horizon\Console;
+use Laravel\Horizon\SupervisorCommandString;
+use Laravel\Horizon\WorkerCommandString;
 
 class HorizonServiceProvider extends Provider
 {
     public function register()
     {
-        if (! defined('HORIZON_PATH')) {
+        if (!defined('HORIZON_PATH')) {
             define('HORIZON_PATH', realpath(base_path('vendor/laravel/horizon')));
         }
+
+        SupervisorCommandString::$command = str_replace('artisan', 'flarum', SupervisorCommandString::$command);
+        WorkerCommandString::$command     = str_replace('artisan', 'flarum', WorkerCommandString::$command);
 
         require_once __DIR__ . '/../helpers.php';
 
@@ -55,16 +59,19 @@ class HorizonServiceProvider extends Provider
     protected function configure()
     {
         $config = include base_path('vendor/laravel/horizon/config/horizon.php');
+
         Arr::set($config, 'path', 'admin/horizon');
         Arr::set($config, 'use', 'horizon');
         Arr::set($config, 'env', 'production');
         Arr::set($config, 'environments', [
             'production' => [
-                'connection' => 'redis',
-                'queue' => ['default'],
-                'balance' => 'balanced',
-                'processes' => 4,
-                'tries' => 3,
+                'supervisor-1' => [
+                    'connection' => 'horizon',
+                    'queue'      => ['default'],
+                    'balance'    => 'balanced',
+                    'processes'  => 4,
+                    'tries'      => 3,
+                ]
             ]
         ]);
 
@@ -78,38 +85,38 @@ class HorizonServiceProvider extends Provider
 
         $repository->set(['horizon' => $config]);
 
-        if (! $repository->has('database.redis')) {
+        if (!$repository->has('database.redis')) {
             $repository->set('database.redis', [
-                'client' => 'predis',
+                'client'  => 'predis',
                 'options' => [
                     'cluster' => 'predis',
-                    'prefix' => '',
+                    'prefix'  => '',
                 ],
                 'horizon' => [
-                    'host' => '127.0.0.1',
-                    'password' =>  null,
-                    'port' => 6379,
+                    'host'     => '127.0.0.1',
+                    'password' => null,
+                    'port'     => 6379,
                     'database' => 0,
                 ],
             ]);
         }
 
-        if (! $repository->has('database.redis.horizon')) {
+        if (!$repository->has('database.redis.horizon')) {
             $repository->set('database.redis.horizon', [
-                'host' => '127.0.0.1',
-                'password' =>  null,
-                'port' => 6379,
+                'host'     => '127.0.0.1',
+                'password' => null,
+                'port'     => 6379,
                 'database' => 0,
             ]);
         }
 
-        if (! $repository->has('queue.connections.horizon')) {
+        if (!$repository->has('queue.connections.horizon')) {
             $repository->set('queue.connections.horizon', [
-                'driver' => 'redis',
-                'connection' => 'horizon',
-                'queue' => 'default',
+                'driver'      => 'redis',
+                'connection'  => 'horizon',
+                'queue'       => 'default',
                 'retry_after' => 90,
-                'block_for' => null,
+                'block_for'   => null,
             ]);
             $repository->set('queue.default', 'horizon');
         }
@@ -122,17 +129,18 @@ class HorizonServiceProvider extends Provider
 
         $events->listen(Configuring::class, function (Configuring $event) {
             foreach ([
-                Console\HorizonCommand::class,
-                Console\ListCommand::class,
-                Console\PurgeCommand::class,
-                Console\PauseCommand::class,
-                Console\ContinueCommand::class,
-                Console\SupervisorCommand::class,
-                Console\SupervisorsCommand::class,
-                Console\TerminateCommand::class,
-                Console\TimeoutCommand::class,
-                Console\WorkCommand::class,
-                Console\SnapshotCommand::class] as $command) {
+                         Console\HorizonCommand::class,
+                         Console\ListCommand::class,
+                         Console\PurgeCommand::class,
+                         Console\PauseCommand::class,
+                         Console\ContinueCommand::class,
+                         Console\SupervisorCommand::class,
+                         Console\SupervisorsCommand::class,
+                         Console\TerminateCommand::class,
+                         Console\TimeoutCommand::class,
+                         Console\WorkCommand::class,
+                         Console\SnapshotCommand::class
+                     ] as $command) {
                 $event->addCommand($command);
             }
         });
