@@ -24,7 +24,7 @@
         "laravel/horizon": "*",
         "illuminate/queue": "*",
         "illuminate/redis": "*",
-        "fof/console": "*"
+        "fof/console": "^0.5"
     },
     "autoload": {
         "psr-4": {
