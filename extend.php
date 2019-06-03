@@ -5,10 +5,22 @@ namespace Bokt\Horizon;
 use Bokt\Horizon\Api;
 use Bokt\Horizon\Http;
 use Flarum\Extend\Routes;
+use FoF\Console\Extend\EnableConsole;
+use FoF\Console\Extend\ScheduleCommand;
+use Illuminate\Console\Scheduling\Schedule;
+use Laravel\Horizon\Console\SnapshotCommand;
 
 return [
+    // Horizon provider
     (new Extend\Provider)
         ->add(Providers\HorizonServiceProvider::class),
+    // Scheduled tasks
+    new EnableConsole,
+    new ScheduleCommand(function (Schedule $schedule) {
+        $schedule->command(SnapshotCommand::class)
+            ->everyMinute();
+    }),
+    // Routes
     (new Routes('admin'))
         ->get('/horizon/api/stats', 'horizon.stats.index', Api\Stats::class)
         ->get('/horizon/api/workload', 'horizon.workload.index', Api\Workload::class)
@@ -26,6 +38,7 @@ return [
         ->get('/horizon/api/jobs/failed/{id}', 'horizon.failed-jobs.show', Api\FailedJob::class)
         ->post('/horizon/api/jobs/retry/{id}', 'horizon.retry-jobs.show', Api\RetryJob::class)
         ->get('/horizon/{view:.*}', 'horizon.index', Http\Home::class),
+    // Assets
     new Extend\PublishAssets(
         base_path('vendor/laravel/horizon/public'),
         public_path('assets/horizon')

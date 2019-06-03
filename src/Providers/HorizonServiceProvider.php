@@ -4,6 +4,7 @@ namespace Bokt\Horizon\Providers;
 
 use Bokt\Horizon\Repositories\RedisJobRepository;
 use Flarum\Console\Event\Configuring;
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\View\Factory as View;

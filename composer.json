@@ -23,7 +23,8 @@
         "flarum/core": "^0.1.0-beta.9",
         "laravel/horizon": "*",
         "illuminate/queue": "*",
-        "illuminate/redis": "*"
+        "illuminate/redis": "*",
+        "fof/console": "*"
     },
     "autoload": {
         "psr-4": {
