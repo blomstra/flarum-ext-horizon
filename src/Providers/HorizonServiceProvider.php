@@ -63,9 +63,8 @@ class HorizonServiceProvider extends Provider
 
         Arr::set($config, 'path', 'admin/horizon');
         Arr::set($config, 'use', 'horizon');
-        Arr::set($config, 'env', 'production');
         Arr::set($config, 'environments', [
-            'production' => [
+            $this->app->environment() => [
                 'supervisor-1' => [
                     'connection' => 'horizon',
                     'queue'      => ['default'],
