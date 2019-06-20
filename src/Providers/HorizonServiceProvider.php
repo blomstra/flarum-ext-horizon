@@ -85,10 +85,12 @@ class HorizonServiceProvider extends Provider
         /** @var Repository $repository */
         $repository = $app->make(Repository::class);
 
-        $flarumConfig = $app->make('flarum.config');
+        $flarumConfig = $app->make('flarum.config') ?? [];
 
-        // Merge default config with the horizon key in config.php.
-        $config = array_merge($config, $flarumConfig['horizon'] ?? []);
+        // Load existing config items and merge these with a possible key in the config.php.
+        // Precedence: existing keys from local extenders, config.php and the default horizon.php.
+        $existing = $repository->get('horizon', []);
+        $config = array_merge($config, $flarumConfig['horizon'] ?? [], $existing);
 
         $repository->set(['horizon' => $config]);
 
