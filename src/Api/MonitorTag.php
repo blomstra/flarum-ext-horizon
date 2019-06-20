@@ -3,6 +3,8 @@
 namespace Bokt\Horizon\Api;
 
 use Illuminate\Contracts\Queue\Factory;
+use Laravel\Horizon\Jobs\MonitorTag as MonitorTagJob;
+use Laravel\Horizon\RedisQueue;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -11,7 +13,7 @@ use Zend\Diactoros\Response\EmptyResponse;
 class MonitorTag implements RequestHandlerInterface
 {
     /**
-     * @var Factory
+     * @var Factory|RedisQueue
      */
     private $queue;
 
@@ -24,7 +26,7 @@ class MonitorTag implements RequestHandlerInterface
     {
         $tag = $request->getParsedBody()['tag'];
 
-        $this->queue->dispatch(new \Laravel\Horizon\Jobs\MonitorTag($tag));
+        $this->queue->push(new MonitorTagJob($tag));
 
         return new EmptyResponse();
     }
