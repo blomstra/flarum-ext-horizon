@@ -29,13 +29,15 @@ class HorizonServiceProvider extends Provider
 
         require_once __DIR__ . '/../helpers.php';
 
-        $this->configure();
+        $this->app->booted(function ($app) {
+            $this->setupConfiguration($app);
 
-        $this->initRedis();
-        $this->registerCommands();
-        $this->registerServices();
+            $this->initRedis();
+            $this->registerCommands();
+            $this->registerServices();
 
-        $this->registerQueueConnectors();
+            $this->registerQueueConnectors();
+        });
     }
 
     protected function initRedis()
@@ -59,12 +61,17 @@ class HorizonServiceProvider extends Provider
 
     protected function configure()
     {
+        // ..
+    }
+
+    protected function setupConfiguration($app)
+    {
         $config = include base_path('vendor/laravel/horizon/config/horizon.php');
 
         Arr::set($config, 'path', 'admin/horizon');
         Arr::set($config, 'use', 'horizon');
         Arr::set($config, 'environments', [
-            $this->app->environment() => [
+            $app->environment() => [
                 'supervisor-1' => [
                     'connection' => 'horizon',
                     'queue'      => ['default'],
@@ -76,9 +83,9 @@ class HorizonServiceProvider extends Provider
         ]);
 
         /** @var Repository $repository */
-        $repository = $this->app->make(Repository::class);
+        $repository = $app->make(Repository::class);
 
-        $flarumConfig = $this->app->make('flarum.config');
+        $flarumConfig = $app->make('flarum.config');
 
         // Merge default config with the horizon key in config.php.
         $config = array_merge($config, $flarumConfig['horizon'] ?? []);
