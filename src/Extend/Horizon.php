@@ -22,7 +22,7 @@ class Horizon implements ExtenderInterface
         }
 
         foreach ($this->environments as $environment => $configuration) {
-            $repository->set("horizon.environment.$environment", $configuration);
+            $repository->set("horizon.environments.$environment", $configuration);
         }
     }
 
