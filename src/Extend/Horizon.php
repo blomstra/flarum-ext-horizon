@@ -10,7 +10,7 @@ use Illuminate\Contracts\Container\Container;
 class Horizon implements ExtenderInterface
 {
     private $config;
-    private $environment;
+    private $environments = [];
 
     public function extend(Container $container, Extension $extension = null)
     {
@@ -21,8 +21,8 @@ class Horizon implements ExtenderInterface
             $repository->set('horizon', $config);
         }
 
-        if ($this->environment) {
-            $repository->set('horizon.environments.production', $this->environment);
+        foreach ($this->environments as $environment => $configuration) {
+            $repository->set("horizon.environment.$environment", $configuration);
         }
     }
 
@@ -39,9 +39,9 @@ class Horizon implements ExtenderInterface
         return $this;
     }
 
-    public function environment(array $environment)
+    public function environment(string $environment, array $configuration)
     {
-        $this->environment = $environment;
+        $this->environments[$environment] = $configuration;
 
         return $this;
     }
