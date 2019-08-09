@@ -2,11 +2,12 @@
 
 namespace Bokt\Horizon\Providers;
 
+use Bokt\Horizon\Dispatcher\Notifier;
 use Bokt\Horizon\Repositories\RedisJobRepository;
 use Flarum\Console\Event\Configuring;
-use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Contracts\Notifications\Dispatcher as Notifications;
 use Illuminate\Contracts\View\Factory as View;
 use Illuminate\Contracts\Redis\Factory as Redis;
 use Illuminate\Redis\RedisServiceProvider;
@@ -37,7 +38,17 @@ class HorizonServiceProvider extends Provider
             $this->registerServices();
 
             $this->registerQueueConnectors();
+            $this->registerNotificationDispatcher();
         });
+    }
+
+    protected function registerNotificationDispatcher()
+    {
+        if (! $this->app->bound(Notifications::class)) {
+            $this->app->singleton(Notifications::class, function () {
+                return new Notifier;
+            });
+        }
     }
 
     protected function initRedis()
