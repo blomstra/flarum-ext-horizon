@@ -4,6 +4,7 @@ namespace Bokt\Horizon;
 
 use Bokt\Horizon\Api;
 use Bokt\Horizon\Http;
+use Bokt\Redis\Extend\Bindings;
 use Flarum\Extend\Routes;
 use FoF\Console\Extend\EnableConsole;
 use FoF\Console\Extend\ScheduleCommand;
@@ -11,6 +12,7 @@ use Illuminate\Console\Scheduling\Schedule;
 use Laravel\Horizon\Console;
 
 return [
+    new Bindings,
     // Horizon provider
     (new Extend\Provider)
         ->add(Providers\HorizonServiceProvider::class),
