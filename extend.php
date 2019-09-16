@@ -8,7 +8,7 @@ use Flarum\Extend\Routes;
 use FoF\Console\Extend\EnableConsole;
 use FoF\Console\Extend\ScheduleCommand;
 use Illuminate\Console\Scheduling\Schedule;
-use Laravel\Horizon\Console\SnapshotCommand;
+use Laravel\Horizon\Console;
 
 return [
     // Horizon provider
@@ -17,9 +17,22 @@ return [
     // Scheduled tasks
     new EnableConsole,
     new ScheduleCommand(function (Schedule $schedule) {
-        $schedule->command(SnapshotCommand::class)
+        $schedule->command(Console\SnapshotCommand::class)
             ->everyMinute();
     }),
+    new Extend\Command([
+        Console\HorizonCommand::class,
+        Console\ListCommand::class,
+        Console\PurgeCommand::class,
+        Console\PauseCommand::class,
+        Console\ContinueCommand::class,
+        Console\StatusCommand::class,
+        Console\SupervisorCommand::class,
+        Console\SupervisorsCommand::class,
+        Console\TerminateCommand::class,
+        Console\TimeoutCommand::class,
+        Console\WorkCommand::class,
+    ]),
     // Routes
     (new Routes('admin'))
         ->get('/horizon/api/stats', 'horizon.stats.index', Api\Stats::class)

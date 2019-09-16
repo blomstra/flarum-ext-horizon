@@ -20,11 +20,10 @@
         "source": "https://github.com/bokt/flarum-queue"
     },
     "require": {
-        "flarum/core": "^0.1.0-beta.9",
+        "flarum/core": "^0.1.0-beta.10",
+        "fof/console": "*",
         "laravel/horizon": "*",
-        "illuminate/queue": "*",
-        "illuminate/redis": "*",
-        "fof/console": "^0.5"
+        "bokt/flarum-redis": "*"
     },
     "autoload": {
         "psr-4": {

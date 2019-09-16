@@ -4,13 +4,13 @@ namespace Bokt\Horizon\Providers;
 
 use Bokt\Horizon\Dispatcher\Notifier;
 use Bokt\Horizon\Repositories\RedisJobRepository;
+use Bokt\Redis\Manager;
 use Flarum\Console\Event\Configuring;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Notifications\Dispatcher as Notifications;
+use Illuminate\Contracts\Redis\Factory;
 use Illuminate\Contracts\View\Factory as View;
-use Illuminate\Contracts\Redis\Factory as Redis;
-use Illuminate\Redis\RedisServiceProvider;
 use Illuminate\Support\Arr;
 use Laravel\Horizon\HorizonServiceProvider as Provider;
 use Laravel\Horizon\Console;
@@ -30,10 +30,11 @@ class HorizonServiceProvider extends Provider
 
         require_once __DIR__ . '/../helpers.php';
 
+        $this->configure();
+
         $this->app->booted(function ($app) {
             $this->setupConfiguration($app);
 
-            $this->initRedis();
             $this->registerCommands();
             $this->registerServices();
 
@@ -44,17 +45,11 @@ class HorizonServiceProvider extends Provider
 
     protected function registerNotificationDispatcher()
     {
-        if (! $this->app->bound(Notifications::class)) {
+        if (!$this->app->bound(Notifications::class)) {
             $this->app->singleton(Notifications::class, function () {
                 return new Notifier;
             });
         }
-    }
-
-    protected function initRedis()
-    {
-        $this->app->register(RedisServiceProvider::class);
-        $this->app->alias('redis', Redis::class);
     }
 
     protected function registerRoutes()
@@ -72,7 +67,9 @@ class HorizonServiceProvider extends Provider
 
     protected function configure()
     {
-        // ..
+        $this->app->afterResolving(Factory::class, function (Manager $manager) {
+            $manager->addConnection('horizon', $manager->getConnectionConfig());
+        });
     }
 
     protected function setupConfiguration($app)
@@ -80,11 +77,11 @@ class HorizonServiceProvider extends Provider
         $config = include base_path('vendor/laravel/horizon/config/horizon.php');
 
         Arr::set($config, 'path', 'admin/horizon');
-        Arr::set($config, 'use', 'horizon');
+//        Arr::set($config, 'use', 'horizon');
         Arr::set($config, 'environments', [
             $app->environment() => [
                 'supervisor-1' => [
-                    'connection' => 'horizon',
+                    'connection' => 'redis',
                     'queue'      => ['default'],
                     'balance'    => 'balanced',
                     'processes'  => 4,
@@ -101,45 +98,9 @@ class HorizonServiceProvider extends Provider
         // Load existing config items and merge these with a possible key in the config.php.
         // Precedence: existing keys from local extenders, config.php and the default horizon.php.
         $existing = $repository->get('horizon', []);
-        $config = array_merge($config, $flarumConfig['horizon'] ?? [], $existing);
+        $config   = array_merge($config, $flarumConfig['horizon'] ?? [], $existing);
 
         $repository->set(['horizon' => $config]);
-
-        if (!$repository->has('database.redis')) {
-            $repository->set('database.redis', [
-                'client'  => 'predis',
-                'options' => [
-                    'cluster' => 'predis',
-                    'prefix'  => '',
-                ],
-                'horizon' => [
-                    'host'     => '127.0.0.1',
-                    'password' => null,
-                    'port'     => 6379,
-                    'database' => 0,
-                ],
-            ]);
-        }
-
-        if (!$repository->has('database.redis.horizon')) {
-            $repository->set('database.redis.horizon', [
-                'host'     => '127.0.0.1',
-                'password' => null,
-                'port'     => 6379,
-                'database' => 0,
-            ]);
-        }
-
-        if (!$repository->has('queue.connections.horizon')) {
-            $repository->set('queue.connections.horizon', [
-                'driver'      => 'redis',
-                'connection'  => 'horizon',
-                'queue'       => 'default',
-                'retry_after' => 90,
-                'block_for'   => null,
-            ]);
-            $repository->set('queue.default', 'horizon');
-        }
     }
 
     protected function registerCommands()
