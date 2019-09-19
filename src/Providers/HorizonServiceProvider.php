@@ -68,7 +68,9 @@ class HorizonServiceProvider extends Provider
     protected function configure()
     {
         $this->app->afterResolving(Factory::class, function (Manager $manager) {
-            $manager->addConnection('horizon', $manager->getConnectionConfig());
+            if ($config = $manager->getConnectionConfig()) {
+                $manager->addConnection('horizon', $config);
+            }
         });
     }
 
