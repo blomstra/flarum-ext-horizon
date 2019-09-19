@@ -35,7 +35,6 @@ class HorizonServiceProvider extends Provider
         $this->app->booted(function ($app) {
             $this->setupConfiguration($app);
 
-            $this->registerCommands();
             $this->registerServices();
 
             $this->registerQueueConnectors();
@@ -103,29 +102,5 @@ class HorizonServiceProvider extends Provider
         $config   = array_merge($config, $flarumConfig['horizon'] ?? [], $existing);
 
         $repository->set(['horizon' => $config]);
-    }
-
-    protected function registerCommands()
-    {
-        /** @var Dispatcher $events */
-        $events = $this->app->make('events');
-
-        $events->listen(Configuring::class, function (Configuring $event) {
-            foreach ([
-                         Console\HorizonCommand::class,
-                         Console\ListCommand::class,
-                         Console\PurgeCommand::class,
-                         Console\PauseCommand::class,
-                         Console\ContinueCommand::class,
-                         Console\SupervisorCommand::class,
-                         Console\SupervisorsCommand::class,
-                         Console\TerminateCommand::class,
-                         Console\TimeoutCommand::class,
-                         Console\WorkCommand::class,
-                         Console\SnapshotCommand::class
-                     ] as $command) {
-                $event->addCommand($command);
-            }
-        });
     }
 }
