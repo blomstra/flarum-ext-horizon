@@ -91,7 +91,7 @@ class HorizonServiceProvider extends Provider
         $config = include base_path('vendor/laravel/horizon/config/horizon.php');
 
         Arr::set($config, 'path', 'admin/horizon');
-//        Arr::set($config, 'use', 'horizon');
+        Arr::set($config, 'use', 'horizon');
         Arr::set($config, 'environments', [
             $app->environment() => [
                 'supervisor-1' => [
