@@ -5,15 +5,12 @@ namespace Bokt\Horizon\Providers;
 use Bokt\Horizon\Dispatcher\Notifier;
 use Bokt\Horizon\Repositories\RedisJobRepository;
 use Bokt\Redis\Manager;
-use Flarum\Console\Event\Configuring;
 use Illuminate\Contracts\Config\Repository;
-use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Notifications\Dispatcher as Notifications;
 use Illuminate\Contracts\Redis\Factory;
 use Illuminate\Contracts\View\Factory as View;
 use Illuminate\Support\Arr;
 use Laravel\Horizon\HorizonServiceProvider as Provider;
-use Laravel\Horizon\Console;
 use Laravel\Horizon\SupervisorCommandString;
 use Laravel\Horizon\WorkerCommandString;
 

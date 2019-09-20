@@ -10,38 +10,49 @@ use Illuminate\Contracts\Container\Container;
 class Horizon implements ExtenderInterface
 {
     private $config;
-    private $environments = [];
+    private $environment;
 
     public function extend(Container $container, Extension $extension = null)
     {
         $repository = $container->make(Repository::class);
 
-        if ($path = $this->config) {
-            $config = include $path;
-            $repository->set('horizon', $config);
+        if ($this->config) {
+            $repository->set('horizon', $this->config);
         }
 
-        foreach ($this->environments as $environment => $configuration) {
-            $repository->set("horizon.environments.$environment", $configuration);
+        if ($this->environment) {
+            $repository->set("horizon.environments.{$container->environment()}", $this->environment);
         }
     }
 
     /**
-     * Use a configuration file to configure Horizon.
+     * Use a configuration file or array to configure Horizon.
      *
-     * @param string $path
+     * @param string|array $config
      * @return Horizon
      */
-    public function config(string $path)
+    public function config($config)
     {
-        $this->config = $path;
+        if (is_string($config)) {
+            $this->config = include $config;
+        } else {
+            $this->config = (array) $config;
+        }
 
         return $this;
     }
 
-    public function environment(string $environment, array $configuration)
+    /**
+     * @param array|string $config
+     * @return $this
+     */
+    public function environment($config)
     {
-        $this->environments[$environment] = $configuration;
+        if (is_string($config)) {
+            $this->environment = include $config;
+        } else {
+            $this->environment = (array) $config;
+        }
 
         return $this;
     }
