@@ -5,6 +5,7 @@ namespace Bokt\Horizon\Providers;
 use Bokt\Horizon\Dispatcher\Notifier;
 use Bokt\Horizon\Repositories\RedisJobRepository;
 use Bokt\Redis\Manager;
+use Illuminate\Contracts\Cache\Factory as CacheFactory;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Notifications\Dispatcher as Notifications;
 use Illuminate\Contracts\Redis\Factory;
@@ -67,6 +68,21 @@ class HorizonServiceProvider extends Provider
             if ($config = $manager->getConnectionConfig()) {
                 $manager->addConnection('horizon', $config);
             }
+        });
+
+        $this->app->extend(CacheFactory::class, function () {
+            return new class implements CacheFactory
+            {
+                public function store($name = null)
+                {
+                    return app('cache.store');
+                }
+
+                public function __call($name, $arguments)
+                {
+                    return call_user_func_array([$this->store(), $name], $arguments);
+                }
+            };
         });
     }
 
