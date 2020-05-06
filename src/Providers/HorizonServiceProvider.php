@@ -3,7 +3,6 @@
 namespace Bokt\Horizon\Providers;
 
 use Bokt\Horizon\Dispatcher\Notifier;
-use Bokt\Horizon\Repositories\RedisJobRepository;
 use Bokt\Redis\Manager;
 use Illuminate\Contracts\Cache\Factory as CacheFactory;
 use Illuminate\Contracts\Config\Repository;
@@ -12,6 +11,7 @@ use Illuminate\Contracts\Redis\Factory;
 use Illuminate\Contracts\View\Factory as View;
 use Illuminate\Support\Arr;
 use Laravel\Horizon\HorizonServiceProvider as Provider;
+use Laravel\Horizon\RedisQueue;
 use Laravel\Horizon\SupervisorCommandString;
 use Laravel\Horizon\WorkerCommandString;
 
@@ -64,6 +64,15 @@ class HorizonServiceProvider extends Provider
 
     protected function configure()
     {
+        $this->app->extend('flarum.queue.connection', function (\Illuminate\Queue\RedisQueue $queue) {
+            /** @var Manager $manager */
+            $manager = $this->app->make(Factory::class);
+            $queue = new RedisQueue($manager);
+            $queue->setContainer($this->app);
+
+            return $queue;
+        });
+
         $this->app->afterResolving(Factory::class, function (Manager $manager) {
             if ($config = $manager->getConnectionConfig()) {
                 $manager->addConnection('horizon', $config);
@@ -78,6 +87,11 @@ class HorizonServiceProvider extends Provider
                     return app('cache.store');
                 }
 
+                public function driver($driver = null)
+                {
+                    return $this->store($driver);
+                }
+
                 public function __call($name, $arguments)
                 {
                     return call_user_func_array([$this->store(), $name], $arguments);
@@ -90,6 +104,7 @@ class HorizonServiceProvider extends Provider
     {
         $config = include base_path('vendor/laravel/horizon/config/horizon.php');
 
+        Arr::set($config, 'env', $app->environment());
         Arr::set($config, 'path', 'admin/horizon');
         Arr::set($config, 'use', 'horizon');
         Arr::set($config, 'environments', [
