@@ -5,6 +5,7 @@ namespace Bokt\Horizon\Extend;
 use Flarum\Extend\ExtenderInterface;
 use Flarum\Extend\LifecycleInterface;
 use Flarum\Extension\Extension;
+use Flarum\Foundation\Paths;
 use Illuminate\Contracts\Container\Container;
 
 class PublishAssets implements LifecycleInterface, ExtenderInterface
@@ -18,10 +19,13 @@ class PublishAssets implements LifecycleInterface, ExtenderInterface
      */
     private $to;
 
-    public function __construct(string $from, string $to)
+    public function __construct()
     {
-        $this->from = $from;
-        $this->to = $to;
+        /** @var Paths $paths */
+        $paths = app()->make(Paths::class);
+
+        $this->from = $paths->vendor . '/laravel/horizon/public';
+        $this->to = $paths->public . '/assets/horizon';
     }
 
     public function onEnable(Container $container, Extension $extension)

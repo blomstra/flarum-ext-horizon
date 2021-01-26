@@ -5,38 +5,37 @@ namespace Bokt\Horizon;
 use Bokt\Horizon\Api;
 use Bokt\Horizon\Http;
 use Bokt\Redis\Extend\Bindings;
-use Flarum\Extend\Routes;
+use Flarum\Extend as Flarum;
 use FoF\Console\Extend\EnableConsole;
 use FoF\Console\Extend\ScheduleCommand;
 use Illuminate\Console\Scheduling\Schedule;
-use Laravel\Horizon\Console;
+use Laravel\Horizon\Console as Laravel;
 
 return [
     new Bindings,
     // Horizon provider
-    (new Extend\Provider)
-        ->add(Providers\HorizonServiceProvider::class),
+    (new Flarum\ServiceProvider)
+        ->register(Providers\HorizonServiceProvider::class),
     // Scheduled tasks
     new EnableConsole,
     new ScheduleCommand(function (Schedule $schedule) {
-        $schedule->command(Console\SnapshotCommand::class)
+        $schedule->command(Laravel\SnapshotCommand::class)
             ->everyMinute();
     }),
-    new Extend\Command([
-        Console\HorizonCommand::class,
-        Console\ListCommand::class,
-        Console\PurgeCommand::class,
-        Console\PauseCommand::class,
-        Console\ContinueCommand::class,
-        Console\StatusCommand::class,
-        Console\SupervisorCommand::class,
-        Console\SupervisorsCommand::class,
-        Console\TerminateCommand::class,
-        Console\TimeoutCommand::class,
-        Console\WorkCommand::class,
-    ]),
+    (new Flarum\Console)
+        ->command(Laravel\HorizonCommand::class)
+        ->command(Laravel\ListCommand::class)
+        ->command(Laravel\PurgeCommand::class)
+        ->command(Laravel\PauseCommand::class)
+        ->command(Laravel\ContinueCommand::class)
+        ->command(Laravel\StatusCommand::class)
+        ->command(Laravel\SupervisorCommand::class)
+        ->command(Laravel\SupervisorsCommand::class)
+        ->command(Laravel\TerminateCommand::class)
+        ->command(Laravel\TimeoutCommand::class)
+        ->command(Console\WorkCommand::class),
     // Routes
-    (new Routes('admin'))
+    (new Flarum\Routes('admin'))
         ->get('/horizon/api/stats', 'horizon.stats.index', Api\Stats::class)
         ->get('/horizon/api/workload', 'horizon.workload.index', Api\Workload::class)
         ->get('/horizon/api/masters', 'horizon.masters.index', Api\Masters::class)
@@ -56,8 +55,5 @@ return [
         ->get('/horizon', 'horizon.index', Http\Home::class)
         ->get('/horizon/{view:.*}', 'horizon.index', Http\Home::class),
     // Assets
-    new Extend\PublishAssets(
-        base_path('vendor/laravel/horizon/public'),
-        public_path('assets/horizon')
-    )
+    new Extend\PublishAssets
 ];

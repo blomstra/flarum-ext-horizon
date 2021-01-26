@@ -3,7 +3,10 @@
 namespace Bokt\Horizon\Providers;
 
 use Bokt\Horizon\Dispatcher\Notifier;
-use Bokt\Redis\Manager;
+use Bokt\Redis\Overrides\RedisManager;
+use Flarum\Foundation\Application;
+use Flarum\Foundation\Config;
+use Flarum\Foundation\Paths;
 use Illuminate\Contracts\Cache\Factory as CacheFactory;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Notifications\Dispatcher as Notifications;
@@ -19,8 +22,11 @@ class HorizonServiceProvider extends Provider
 {
     public function register()
     {
+        /** @var Paths $paths */
+        $paths = $this->app->make(Paths::class);
+
         if (!defined('HORIZON_PATH')) {
-            define('HORIZON_PATH', realpath(base_path('vendor/laravel/horizon')));
+            define('HORIZON_PATH', realpath($paths->vendor . '/laravel/horizon'));
         }
 
         SupervisorCommandString::$command = str_replace('artisan', 'flarum', SupervisorCommandString::$command);
@@ -29,15 +35,18 @@ class HorizonServiceProvider extends Provider
         require_once __DIR__ . '/../helpers.php';
 
         $this->configure();
+    }
 
-        $this->app->booted(function ($app) {
-            $this->setupConfiguration($app);
+    public function boot()
+    {
+        $this->setupConfiguration($this->app);
 
-            $this->registerServices();
+        $this->registerServices();
 
-            $this->registerQueueConnectors();
-            $this->registerNotificationDispatcher();
-        });
+        $this->registerQueueConnectors();
+        $this->registerNotificationDispatcher();
+
+        parent::boot();
     }
 
     protected function registerNotificationDispatcher()
@@ -73,7 +82,7 @@ class HorizonServiceProvider extends Provider
             return $queue;
         });
 
-        $this->app->afterResolving(Factory::class, function (Manager $manager) {
+        $this->app->afterResolving(Factory::class, function (RedisManager $manager) {
             if ($config = $manager->getConnectionConfig()) {
                 $manager->addConnection('horizon', $config);
             }
@@ -100,15 +109,21 @@ class HorizonServiceProvider extends Provider
         });
     }
 
-    protected function setupConfiguration($app)
+    protected function setupConfiguration($container)
     {
-        $config = include base_path('vendor/laravel/horizon/config/horizon.php');
+        /** @var Paths $paths */
+        $paths = $container->make(Paths::class);
 
-        Arr::set($config, 'env', $app->environment());
+        /** @var Application $app */
+        $app = $container->make(Application::class);
+
+        $config = include $paths->vendor . '/laravel/horizon/config/horizon.php';
+
+        Arr::set($config, 'env', 'production');
         Arr::set($config, 'path', 'admin/horizon');
         Arr::set($config, 'use', 'horizon');
         Arr::set($config, 'environments', [
-            $app->environment() => [
+            'production' => [
                 'supervisor-1' => [
                     'connection' => 'redis',
                     'queue'      => ['default'],
@@ -120,9 +135,9 @@ class HorizonServiceProvider extends Provider
         ]);
 
         /** @var Repository $repository */
-        $repository = $app->make(Repository::class);
+        $repository = $container->make(Repository::class);
 
-        $flarumConfig = $app->make('flarum.config') ?? [];
+        $flarumConfig = $container->make('flarum.config') ?? [];
 
         // Load existing config items and merge these with a possible key in the config.php.
         // Precedence: existing keys from local extenders, config.php and the default horizon.php.
@@ -130,5 +145,10 @@ class HorizonServiceProvider extends Provider
         $config   = array_merge($config, $flarumConfig['horizon'] ?? [], $existing);
 
         $repository->set(['horizon' => $config]);
+    }
+
+    public function defineAssetPublishing()
+    {
+
     }
 }
