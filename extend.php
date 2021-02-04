@@ -4,7 +4,7 @@ namespace Bokt\Horizon;
 
 use Bokt\Horizon\Api;
 use Bokt\Horizon\Http;
-use Bokt\Redis\Extend\Bindings;
+use Blomstra\Redis\Extend\Bindings;
 use Flarum\Extend as Flarum;
 use FoF\Console\Extend\EnableConsole;
 use FoF\Console\Extend\ScheduleCommand;

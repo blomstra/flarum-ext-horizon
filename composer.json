@@ -23,7 +23,7 @@
         "flarum/core": "^0.1.0-beta.15",
         "fof/console": "*",
         "laravel/horizon": "*",
-        "bokt/flarum-redis": "*",
+        "blomstra/flarum-redis": "*",
         "vlucas/phpdotenv": "^v3.6.8"
     },
     "autoload": {
