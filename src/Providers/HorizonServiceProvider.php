@@ -1,8 +1,8 @@
 <?php
 
-namespace Bokt\Horizon\Providers;
+namespace Blomstra\Horizon\Providers;
 
-use Bokt\Horizon\Dispatcher\Notifier;
+use Blomstra\Horizon\Dispatcher\Notifier;
 use Bokt\Redis\Overrides\RedisManager;
 use Flarum\Foundation\Application;
 use Flarum\Foundation\Config;

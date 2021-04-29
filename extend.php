@@ -1,9 +1,9 @@
 <?php
 
-namespace Bokt\Horizon;
+namespace Blomstra\Horizon;
 
-use Bokt\Horizon\Api;
-use Bokt\Horizon\Http;
+use Blomstra\Horizon\Api;
+use Blomstra\Horizon\Http;
 use Blomstra\Redis\Extend\Bindings;
 use Flarum\Extend as Flarum;
 use FoF\Console\Extend\EnableConsole;

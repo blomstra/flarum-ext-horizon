@@ -1,6 +1,6 @@
 <?php
 
-namespace Bokt\Horizon\Api;
+namespace Blomstra\Horizon\Api;
 
 use Laravel\Horizon\Contracts\JobRepository;
 use Psr\Http\Message\ResponseInterface;

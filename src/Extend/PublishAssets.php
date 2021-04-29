@@ -1,6 +1,6 @@
 <?php
 
-namespace Bokt\Horizon\Extend;
+namespace Blomstra\Horizon\Extend;
 
 use Flarum\Extend\ExtenderInterface;
 use Flarum\Extend\LifecycleInterface;

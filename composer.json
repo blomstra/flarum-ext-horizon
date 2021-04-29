@@ -1,9 +1,9 @@
 {
-    "name": "bokt/flarum-horizon",
+    "name": "blomstra/flarum-horizon",
     "description": "Adds Laravel Horizon to Flarum",
     "keywords": [
         "extension",
-        "flarum", "bokt",
+        "flarum", "blomstra",
         "queue", "horizon"
     ],
     "type": "flarum-extension",
@@ -16,19 +16,19 @@
         }
     ],
     "support": {
-        "issues": "https://github.com/bokt/flarum-queue/issues",
-        "source": "https://github.com/bokt/flarum-queue"
+        "issues": "https://github.com/blomstra/flarum-queue/issues",
+        "source": "https://github.com/blomstra/flarum-queue"
     },
     "require": {
-        "flarum/core": "^0.1.0-beta.15",
+        "flarum/core": "^0.1.0-beta.16",
         "fof/console": "*",
         "laravel/horizon": "*",
         "blomstra/flarum-redis": "*",
-        "vlucas/phpdotenv": "^v3.6.8"
+        "vlucas/phpdotenv": "^5.2"
     },
     "autoload": {
         "psr-4": {
-            "Bokt\\Horizon\\": "src/"
+            "Blomstra\\Horizon\\": "src/"
         }
     },
     "extra": {

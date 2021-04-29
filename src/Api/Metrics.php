@@ -1,6 +1,6 @@
 <?php
 
-namespace Bokt\Horizon\Api;
+namespace Blomstra\Horizon\Api;
 
 use Laravel\Horizon\Contracts\MetricsRepository;
 use Psr\Http\Message\ResponseInterface;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Bokt\Horizon\Api;
+namespace Blomstra\Horizon\Api;
 
 use Illuminate\Support\Collection;
 use Laravel\Horizon\Contracts\JobRepository;

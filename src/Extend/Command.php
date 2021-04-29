@@ -1,6 +1,6 @@
 <?php
 
-namespace Bokt\Horizon\Extend;
+namespace Blomstra\Horizon\Extend;
 
 use Flarum\Console\Event\Configuring;
 use Flarum\Extend\ExtenderInterface;

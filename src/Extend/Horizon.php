@@ -1,6 +1,6 @@
 <?php
 
-namespace Bokt\Horizon\Extend;
+namespace Blomstra\Horizon\Extend;
 
 use Flarum\Extend\ExtenderInterface;
 use Flarum\Extension\Extension;
@@ -21,7 +21,7 @@ class Horizon implements ExtenderInterface
         }
 
         if ($this->environment) {
-            $repository->set("horizon.environments.{$container->environment()}", $this->environment);
+            $repository->set("horizon.environments.{$container->make('env')}", $this->environment);
         }
     }
 

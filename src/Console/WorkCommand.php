@@ -1,6 +1,6 @@
 <?php
 
-namespace Bokt\Horizon\Console;
+namespace Blomstra\Horizon\Console;
 
 use Flarum\Foundation\Config;
 

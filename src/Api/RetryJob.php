@@ -1,6 +1,6 @@
 <?php
 
-namespace Bokt\Horizon\Api;
+namespace Blomstra\Horizon\Api;
 
 use Illuminate\Contracts\Queue\Factory;
 use Laravel\Horizon\Jobs\RetryFailedJob;

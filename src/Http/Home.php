@@ -1,6 +1,6 @@
 <?php
 
-namespace Bokt\Horizon\Http;
+namespace Blomstra\Horizon\Http;
 
 use Flarum\Frontend\Frontend;
 use Illuminate\Contracts\View\Factory;

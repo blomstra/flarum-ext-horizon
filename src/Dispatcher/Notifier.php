@@ -1,6 +1,6 @@
 <?php
 
-namespace Bokt\Horizon\Dispatcher;
+namespace Blomstra\Horizon\Dispatcher;
 
 use Illuminate\Contracts\Notifications\Dispatcher;
 
