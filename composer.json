@@ -41,6 +41,9 @@
                 "backgroundRepeat": "no-repeat",
                 "backgroundPosition": "center"
             }
+        },
+        "extiverse": {
+            "discuss": "https://discuss.flarum.org/d/27520"
         }
     }
 }
