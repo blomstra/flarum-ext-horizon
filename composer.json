@@ -16,8 +16,8 @@
         }
     ],
     "support": {
-        "issues": "https://github.com/blomstra/flarum-queue/issues",
-        "source": "https://github.com/blomstra/flarum-queue"
+        "issues": "https://github.com/blomstra/flarum-ext-horizon/issues",
+        "source": "https://github.com/blomstra/flarum-ext-horizon"
     },
     "require": {
         "flarum/core": "^1.0.0",
