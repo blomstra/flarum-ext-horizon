@@ -30,7 +30,7 @@ class PublishAssets implements LifecycleInterface, ExtenderInterface
 
     public function onEnable(Container $container, Extension $extension)
     {
-        if ($extension->name === 'bokt/flarum-horizon') {
+        if ($extension->name === 'blomstra/horizon') {
             $container->make('files')->copyDirectory(
                 $this->from,
                 $this->to
@@ -40,7 +40,7 @@ class PublishAssets implements LifecycleInterface, ExtenderInterface
 
     public function onDisable(Container $container, Extension $extension)
     {
-        if ($extension->name === 'bokt/flarum-horizon') {
+        if ($extension->name === 'blomstra/horizon') {
             $container->make('files')->deleteDirectory(
                 $this->to
             );

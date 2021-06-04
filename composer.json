@@ -1,5 +1,5 @@
 {
-    "name": "blomstra/flarum-horizon",
+    "name": "blomstra/horizon",
     "description": "Adds Laravel Horizon to Flarum",
     "keywords": [
         "extension",
@@ -20,8 +20,7 @@
         "source": "https://github.com/blomstra/flarum-queue"
     },
     "require": {
-        "flarum/core": "^0.1.0-beta.16",
-        "fof/console": "*",
+        "flarum/core": "^1.0.0",
         "laravel/horizon": "*",
         "blomstra/flarum-redis": "*",
         "vlucas/phpdotenv": "^5.2"

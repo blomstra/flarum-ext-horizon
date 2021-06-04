@@ -6,22 +6,14 @@ use Blomstra\Horizon\Api;
 use Blomstra\Horizon\Http;
 use Blomstra\Redis\Extend\Bindings;
 use Flarum\Extend as Flarum;
-use FoF\Console\Extend\EnableConsole;
-use FoF\Console\Extend\ScheduleCommand;
-use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Console\Scheduling\Event;
 use Laravel\Horizon\Console as Laravel;
 
 return [
     new Bindings,
-    // Horizon provider
     (new Flarum\ServiceProvider)
         ->register(Providers\HorizonServiceProvider::class),
-    // Scheduled tasks
-    new EnableConsole,
-    new ScheduleCommand(function (Schedule $schedule) {
-        $schedule->command(Laravel\SnapshotCommand::class)
-            ->everyMinute();
-    }),
+
     (new Flarum\Console)
         ->command(Laravel\HorizonCommand::class)
         ->command(Laravel\ListCommand::class)
@@ -33,7 +25,10 @@ return [
         ->command(Laravel\SupervisorsCommand::class)
         ->command(Laravel\TerminateCommand::class)
         ->command(Laravel\TimeoutCommand::class)
-        ->command(Console\WorkCommand::class),
+        ->command(Console\WorkCommand::class)
+        ->schedule(Laravel\SnapshotCommand::class, function (Event $schedule) {
+            $schedule->everyMinute();
+        }),
     // Routes
     (new Flarum\Routes('admin'))
         ->get('/horizon/api/stats', 'horizon.stats.index', Api\Stats::class)
@@ -53,7 +48,7 @@ return [
         ->get('/horizon/api/jobs/failed/{id}', 'horizon.failed-jobs.show', Api\FailedJob::class)
         ->post('/horizon/api/jobs/retry/{id}', 'horizon.retry-jobs.show', Api\RetryJob::class)
         ->get('/horizon', 'horizon.index', Http\Home::class)
-        ->get('/horizon/{view:.*}', 'horizon.index', Http\Home::class),
+        ->get('/horizon/{view:.*}', 'horizon.index.view', Http\Home::class),
     // Assets
     new Extend\PublishAssets
 ];

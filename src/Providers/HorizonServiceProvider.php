@@ -3,7 +3,7 @@
 namespace Blomstra\Horizon\Providers;
 
 use Blomstra\Horizon\Dispatcher\Notifier;
-use Bokt\Redis\Overrides\RedisManager;
+use Blomstra\Redis\Overrides\RedisManager;
 use Flarum\Foundation\Application;
 use Flarum\Foundation\Config;
 use Flarum\Foundation\Paths;
@@ -148,6 +148,16 @@ class HorizonServiceProvider extends Provider
     }
 
     public function defineAssetPublishing()
+    {
+
+    }
+
+    protected function offerPublishing()
+    {
+
+    }
+
+    protected function registerCommands()
     {
 
     }
