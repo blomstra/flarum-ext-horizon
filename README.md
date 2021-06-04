@@ -1,11 +1,35 @@
-# Laravel Horizon for Flarum
+# Horizon, the queue dashboard
 
-This Flarum extension adds all functionality of Horizon to Flarum,
-including the dashboard.
+This extension adds full integration for [Laravel Horizon](https://laravel.com/docs/8.x/horizon).
 
-Before you start make sure to read the full documentation about
-[Horizon](https://laravel.com/docs/5.7/horizon). Horizon (currently)
-only works with a redis [queue](https://laravel.com/docs/5.7/queues).
+Which includes:
+
+- a dashboard at (yoursite.com/admin/horizon)
+- scalable redis workers with balancing strategies
+- multiple scalable redis worker servers (untested)
+- and much more.
+
+![](https://laravel.com/img/docs/horizon-example.png)
+
+Laravel Horizon runs only using a redis connection. As such you 
+**have to configure** [blomstra/redis](https://discuss.flarum.org/d/21873). If you don't you will
+see errors pop up.
+
+
+### Installation
+Install manually with composer:
+
+```sh
+composer require blomstra/horizon:*
+```
+
+### Set up
+
+Enable the extension from your admin area and then run `php flarum horizon`. This will only run as long as your
+process is active, so make sure to set it up using supervisor or something similar, see the [Horizon Documentation](https://laravel.com/docs/8.x/horizon#deploying-horizon)
+for instructions.
+
+### Configure
 
 By default this extension will set up a default queue connection called
 `horizon` using redis. You can override the full horizon config using
@@ -16,16 +40,18 @@ installation:
 <?php
 
 return [
-    (new Bokt\Horizon\Extend\Horizon)->config(
+    (new Blomstra\Horizon\Extend\Horizon)->config(
         './your-horizon-config.php'
     )
 ];
 ```
 
-I personally use the `env()` helper in configuration files and store
-these files under the `config/` folder.
+### Links
 
-Once you installed `bokt/flarum-horizon` go into your admin area, enable
-the extension so that the js and css files for the extension can be published.
-Once you've done that, visit `/admin/horizon/` to see the full dashboard.
-Please note that the admin dashboard requires you to be an admin in Flarum.
+- [Packagist](https://packagist.org/packages/blomstra/horizon)
+- [GitHub](https://github.com/blomstra/flarum-ext-horizon)
+
+---
+
+- Blomstra provides managed Flarum hosting.
+- https://blomstra.net
