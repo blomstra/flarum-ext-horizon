@@ -117,13 +117,15 @@ class HorizonServiceProvider extends Provider
         /** @var Application $app */
         $app = $container->make(Application::class);
 
+        $env = $container->make('env');
+
         $config = include $paths->vendor . '/laravel/horizon/config/horizon.php';
 
-        Arr::set($config, 'env', 'production');
+        Arr::set($config, 'env', $env);
         Arr::set($config, 'path', 'admin/horizon');
         Arr::set($config, 'use', 'horizon');
         Arr::set($config, 'environments', [
-            'production' => [
+            $env => [
                 'supervisor-1' => [
                     'connection' => 'redis',
                     'queue'      => ['default'],
