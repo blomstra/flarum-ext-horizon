@@ -5,7 +5,6 @@ namespace Blomstra\Horizon\Providers;
 use Blomstra\Horizon\Dispatcher\Notifier;
 use Blomstra\Redis\Overrides\RedisManager;
 use Flarum\Foundation\Application;
-use Flarum\Foundation\Config;
 use Flarum\Foundation\Paths;
 use Illuminate\Contracts\Cache\Factory as CacheFactory;
 use Illuminate\Contracts\Config\Repository;
@@ -13,6 +12,7 @@ use Illuminate\Contracts\Notifications\Dispatcher as Notifications;
 use Illuminate\Contracts\Redis\Factory;
 use Illuminate\Contracts\View\Factory as View;
 use Illuminate\Support\Arr;
+use Laravel\Horizon\Events\LongWaitDetected;
 use Laravel\Horizon\HorizonServiceProvider as Provider;
 use Laravel\Horizon\RedisQueue;
 use Laravel\Horizon\SupervisorCommandString;
@@ -147,6 +147,14 @@ class HorizonServiceProvider extends Provider
         $config   = array_merge($config, $flarumConfig['horizon'] ?? [], $existing);
 
         $repository->set(['horizon' => $config]);
+    }
+
+    protected function registerEvents()
+    {
+        // Remove event listeners for Long wait because it uses the Laravel Notification facade.
+        unset($this->events[LongWaitDetected::class]);
+
+        parent::registerEvents();
     }
 
     public function defineAssetPublishing()
