@@ -3,16 +3,18 @@
     "description": "Adds Laravel Horizon to Flarum",
     "keywords": [
         "extension",
-        "flarum", "blomstra",
-        "queue", "horizon"
+        "flarum",
+        "blomstra",
+        "queue",
+        "horizon"
     ],
     "type": "flarum-extension",
     "license": "MIT",
     "authors": [
         {
-            "name": "Daniël Klabbers",
-            "email": "daniel@klabbers.email",
-            "homepage": "http://luceos.com"
+            "name": "Team Blomstra",
+            "email": "development@blomstra.net",
+            "role": "Developer"
         }
     ],
     "support": {
