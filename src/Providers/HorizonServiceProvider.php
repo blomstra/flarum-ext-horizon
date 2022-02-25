@@ -4,13 +4,11 @@ namespace Blomstra\Horizon\Providers;
 
 use Blomstra\Horizon\Dispatcher\Notifier;
 use Blomstra\Redis\Overrides\RedisManager;
-use Flarum\Foundation\Application;
 use Flarum\Foundation\Paths;
 use Illuminate\Contracts\Cache\Factory as CacheFactory;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Notifications\Dispatcher as Notifications;
 use Illuminate\Contracts\Redis\Factory;
-use Illuminate\Contracts\View\Factory as View;
 use Illuminate\Support\Arr;
 use Laravel\Horizon\Events\LongWaitDetected;
 use Laravel\Horizon\HorizonServiceProvider as Provider;
@@ -23,7 +21,7 @@ class HorizonServiceProvider extends Provider
     public function register()
     {
         /** @var Paths $paths */
-        $paths = $this->app->make(Paths::class);
+        $paths = resolve(Paths::class);
 
         if (!defined('HORIZON_PATH')) {
             define('HORIZON_PATH', realpath($paths->vendor . '/laravel/horizon'));
@@ -63,18 +61,10 @@ class HorizonServiceProvider extends Provider
         // .. via extend.php
     }
 
-    protected function registerResources()
-    {
-        /** @var Factory $view */
-        $view = $this->app->make(View::class);
-
-        $view->addNamespace('horizon', __DIR__ . '/../../resources/views');
-    }
-
     protected function configure()
     {
         $this->app->extend('flarum.queue.connection', function (\Illuminate\Queue\RedisQueue $queue) {
-            /** @var Manager $manager */
+            /** @var RedisManager $manager */
             $manager = $this->app->make(Factory::class);
             $queue = new RedisQueue($manager);
             $queue->setContainer($this->app);
@@ -93,7 +83,7 @@ class HorizonServiceProvider extends Provider
             {
                 public function store($name = null)
                 {
-                    return app('cache.store');
+                    return resolve('cache.store');
                 }
 
                 public function driver($driver = null)
@@ -112,10 +102,7 @@ class HorizonServiceProvider extends Provider
     protected function setupConfiguration($container)
     {
         /** @var Paths $paths */
-        $paths = $container->make(Paths::class);
-
-        /** @var Application $app */
-        $app = $container->make(Application::class);
+        $paths = resolve(Paths::class);
 
         $env = $container->make('env');
 
@@ -129,7 +116,7 @@ class HorizonServiceProvider extends Provider
                 'supervisor-1' => [
                     'connection' => 'redis',
                     'queue'      => ['default'],
-                    'balance'    => 'balanced',
+                    'balance'    => 'auto',
                     'processes'  => 4,
                     'tries'      => 3,
                 ]

@@ -10,6 +10,10 @@ use Illuminate\Console\Scheduling\Event;
 use Laravel\Horizon\Console as Laravel;
 
 return [
+    (new Flarum\Frontend('admin'))
+        ->js(__DIR__ . '/js/dist/admin.js')
+        ->css(__DIR__. '/resources/less/admin.less'),
+
     new Bindings,
     (new Flarum\ServiceProvider)
         ->register(Providers\HorizonServiceProvider::class),
@@ -26,8 +30,9 @@ return [
         ->command(Laravel\TerminateCommand::class)
         ->command(Laravel\TimeoutCommand::class)
         ->command(Console\WorkCommand::class)
+        ->command(Laravel\SnapshotCommand::class)
         ->schedule(Laravel\SnapshotCommand::class, function (Event $schedule) {
-            $schedule->everyMinute();
+            $schedule->everyMinute()->onOneServer()->withoutOverlapping();
         }),
     // Routes
     (new Flarum\Routes('admin'))
@@ -50,5 +55,8 @@ return [
         ->get('/horizon', 'horizon.index', Http\Home::class)
         ->get('/horizon/{view:.*}', 'horizon.index.view', Http\Home::class),
     // Assets
-    new Extend\PublishAssets
+    new Extend\PublishAssets,
+
+    (new Flarum\View())
+        ->namespace('horizon', __DIR__.'/resources/views')
 ];

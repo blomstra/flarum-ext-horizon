@@ -22,7 +22,7 @@
         "source": "https://github.com/blomstra/flarum-ext-horizon"
     },
     "require": {
-        "flarum/core": "^1.0.0",
+        "flarum/core": "^1.2.0",
         "laravel/horizon": "*",
         "blomstra/flarum-redis": "*",
         "vlucas/phpdotenv": "^5.2"
@@ -35,6 +35,7 @@
     "extra": {
         "flarum-extension": {
             "title": "Horizon",
+            "category": "feature",
             "icon": {
                 "image": "resources/logo.svg",
                 "backgroundColor": "#EBF1FD",
