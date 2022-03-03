@@ -8,7 +8,7 @@ export default class SettingsPage extends ExtensionPage {
     return (
       <div className="container">
         <div className="HorizonSettingsPage">
-          <LinkButton icon='fas fa-external-link-alt' className="Button" href={horizonUrl} external={true} target="_blank">
+          <LinkButton icon="fas fa-external-link-alt" className="Button" href={horizonUrl} external={true} target="_blank">
             Horizon dashboard
           </LinkButton>
         </div>
