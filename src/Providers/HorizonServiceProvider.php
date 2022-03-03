@@ -3,6 +3,7 @@
 namespace Blomstra\Horizon\Providers;
 
 use Blomstra\Horizon\Dispatcher\Notifier;
+use Blomstra\Horizon\Overrides\RedisQueue;
 use Blomstra\Redis\Overrides\RedisManager;
 use Flarum\Foundation\Paths;
 use Illuminate\Contracts\Cache\Factory as CacheFactory;
@@ -12,7 +13,6 @@ use Illuminate\Contracts\Redis\Factory;
 use Illuminate\Support\Arr;
 use Laravel\Horizon\Events\LongWaitDetected;
 use Laravel\Horizon\HorizonServiceProvider as Provider;
-use Laravel\Horizon\RedisQueue;
 use Laravel\Horizon\SupervisorCommandString;
 use Laravel\Horizon\WorkerCommandString;
 
