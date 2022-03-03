@@ -25,14 +25,14 @@ class Stats implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         return new JsonResponse([
-            'jobsPerMinute' => app(MetricsRepository::class)->jobsProcessedPerMinute(),
+            'jobsPerMinute' => resolve(MetricsRepository::class)->jobsProcessedPerMinute(),
             'processes' => $this->totalProcessCount(),
-            'queueWithMaxRuntime' => app(MetricsRepository::class)->queueWithMaximumRuntime(),
-            'queueWithMaxThroughput' => app(MetricsRepository::class)->queueWithMaximumThroughput(),
-            'recentlyFailed' => app(JobRepository::class)->countRecentlyFailed(),
-            'recentJobs' => app(JobRepository::class)->countRecent(),
+            'queueWithMaxRuntime' => resolve(MetricsRepository::class)->queueWithMaximumRuntime(),
+            'queueWithMaxThroughput' => resolve(MetricsRepository::class)->queueWithMaximumThroughput(),
+            'recentlyFailed' => resolve(JobRepository::class)->countRecentlyFailed(),
+            'recentJobs' => resolve(JobRepository::class)->countRecent(),
             'status' => $this->currentStatus(),
-            'wait' => collect(app(WaitTimeCalculator::class)->calculate())->take(1),
+            'wait' => collect(resolve(WaitTimeCalculator::class)->calculate())->take(1),
             'periods' => [
                 'recentJobs' => $this->config->get('horizon.trim.recent'),
                 'recentlyFailed' => $this->config->get('horizon.trim.failed'),
@@ -42,7 +42,7 @@ class Stats implements RequestHandlerInterface
 
     protected function totalProcessCount()
     {
-        $supervisors = app(SupervisorRepository::class)->all();
+        $supervisors = resolve(SupervisorRepository::class)->all();
 
         return collect($supervisors)->reduce(function ($carry, $supervisor) {
             return $carry + collect($supervisor->processes)->sum();
@@ -50,7 +50,7 @@ class Stats implements RequestHandlerInterface
     }
     protected function currentStatus()
     {
-        if (! $masters = app(MasterSupervisorRepository::class)->all()) {
+        if (! $masters = resolve(MasterSupervisorRepository::class)->all()) {
             return 'inactive';
         }
 

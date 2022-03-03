@@ -22,7 +22,7 @@ class PublishAssets implements LifecycleInterface, ExtenderInterface
     public function __construct()
     {
         /** @var Paths $paths */
-        $paths = app()->make(Paths::class);
+        $paths = resolve(Paths::class);
 
         $this->from = $paths->vendor . '/laravel/horizon/public';
         $this->to = $paths->public . '/assets/horizon';

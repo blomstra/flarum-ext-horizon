@@ -4,7 +4,6 @@ namespace Blomstra\Horizon\Http;
 
 use Flarum\Frontend\Frontend;
 use Illuminate\Contracts\View\Factory;
-use Laravel\Horizon\Horizon;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
