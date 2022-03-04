@@ -1,14 +1,24 @@
 <?php
 
+/*
+ * This file is part of blomstra/horizon.
+ *
+ * Copyright (c) Bokt.
+ * Copyright (c) Blomstra Ltd.
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
 namespace Blomstra\Horizon\Api;
 
 use Illuminate\Support\Collection;
+use Laminas\Diactoros\Response\JsonResponse;
 use Laravel\Horizon\Contracts\JobRepository;
 use Laravel\Horizon\Contracts\TagRepository;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Laminas\Diactoros\Response\JsonResponse;
 
 class TagMonitoring implements RequestHandlerInterface
 {
@@ -32,12 +42,13 @@ class TagMonitoring implements RequestHandlerInterface
         $tag = $request->getQueryParams()['tag'];
 
         $jobIds = $this->tags->paginate(
-            $tag, $startingAt = $request->getQueryParams()['starting_at'] ?? 0,
+            $tag,
+            $startingAt = $request->getQueryParams()['starting_at'] ?? 0,
             $request->getQueryParams()['limit'] ?? 25
         );
 
         return new JsonResponse([
-            'jobs' => $this->getJobs($jobIds, $startingAt),
+            'jobs'  => $this->getJobs($jobIds, $startingAt),
             'total' => $this->tags->count($tag),
         ]);
     }
@@ -45,8 +56,9 @@ class TagMonitoring implements RequestHandlerInterface
     /**
      * Get the jobs for the given IDs.
      *
-     * @param  array  $jobIds
-     * @param  int  $startingAt
+     * @param array $jobIds
+     * @param int   $startingAt
+     *
      * @return Collection
      */
     protected function getJobs($jobIds, $startingAt = 0)

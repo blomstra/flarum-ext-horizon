@@ -1,5 +1,15 @@
 <?php
 
+/*
+ * This file is part of blomstra/horizon.
+ *
+ * Copyright (c) Bokt.
+ * Copyright (c) Blomstra Ltd.
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
 namespace Blomstra\Horizon\Extend;
 
 use Flarum\Extend\ExtenderInterface;
@@ -24,8 +34,8 @@ class PublishAssets implements LifecycleInterface, ExtenderInterface
         /** @var Paths $paths */
         $paths = resolve(Paths::class);
 
-        $this->from = $paths->vendor . '/laravel/horizon/public';
-        $this->to = $paths->public . '/assets/horizon';
+        $this->from = $paths->vendor.'/laravel/horizon/public';
+        $this->to = $paths->public.'/assets/horizon';
     }
 
     public function onEnable(Container $container, Extension $extension)

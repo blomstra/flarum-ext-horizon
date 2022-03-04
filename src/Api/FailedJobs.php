@@ -1,14 +1,24 @@
 <?php
 
+/*
+ * This file is part of blomstra/horizon.
+ *
+ * Copyright (c) Bokt.
+ * Copyright (c) Blomstra Ltd.
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
 namespace Blomstra\Horizon\Api;
 
 use Illuminate\Support\Arr;
+use Laminas\Diactoros\Response\JsonResponse;
 use Laravel\Horizon\Contracts\JobRepository;
 use Laravel\Horizon\Contracts\TagRepository;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Laminas\Diactoros\Response\JsonResponse;
 
 class FailedJobs implements RequestHandlerInterface
 {
@@ -31,7 +41,7 @@ class FailedJobs implements RequestHandlerInterface
     {
         $tag = $request->getQueryParams()['tag'] ?? null;
 
-        $jobs = ! $tag
+        $jobs = !$tag
             ? $this->paginate($request)
             : $this->paginateByTag($request, $tag);
 
@@ -55,7 +65,9 @@ class FailedJobs implements RequestHandlerInterface
     protected function paginateByTag(ServerRequestInterface $request, $tag)
     {
         $jobIds = $this->tags->paginate(
-            'failed:'.$tag, (Arr::get($request->getQueryParams(), 'starting_at', -1)) + 1, 50
+            'failed:'.$tag,
+            (Arr::get($request->getQueryParams(), 'starting_at', -1)) + 1,
+            50
         );
 
         $startingAt = Arr::get($request->getQueryParams(), 'starting_at', 0);

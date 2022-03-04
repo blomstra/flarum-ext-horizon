@@ -1,5 +1,15 @@
 <?php
 
+/*
+ * This file is part of blomstra/horizon.
+ *
+ * Copyright (c) Bokt.
+ * Copyright (c) Blomstra Ltd.
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
 namespace Blomstra\Horizon\Extend;
 
 use Flarum\Extend\ExtenderInterface;
@@ -23,7 +33,7 @@ class Queue implements ExtenderInterface
         }
 
         foreach ($this->connections as $name => $config) {
-            $repository->set('queue.connections.' . $name, $config);
+            $repository->set('queue.connections.'.$name, $config);
         }
     }
 
@@ -31,6 +41,7 @@ class Queue implements ExtenderInterface
      * Use a configuration file to configure the Queue.
      *
      * @param string $path
+     *
      * @return Queue
      */
     public function config(string $path)

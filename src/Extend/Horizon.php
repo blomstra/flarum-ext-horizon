@@ -1,5 +1,15 @@
 <?php
 
+/*
+ * This file is part of blomstra/horizon.
+ *
+ * Copyright (c) Bokt.
+ * Copyright (c) Blomstra Ltd.
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
 namespace Blomstra\Horizon\Extend;
 
 use Flarum\Extend\ExtenderInterface;
@@ -29,6 +39,7 @@ class Horizon implements ExtenderInterface
      * Use a configuration file or array to configure Horizon.
      *
      * @param string|array $config
+     *
      * @return Horizon
      */
     public function config($config)
@@ -44,6 +55,7 @@ class Horizon implements ExtenderInterface
 
     /**
      * @param array|string $config
+     *
      * @return $this
      */
     public function environment($config)

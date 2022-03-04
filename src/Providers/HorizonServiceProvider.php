@@ -1,5 +1,15 @@
 <?php
 
+/*
+ * This file is part of blomstra/horizon.
+ *
+ * Copyright (c) Bokt.
+ * Copyright (c) Blomstra Ltd.
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
 namespace Blomstra\Horizon\Providers;
 
 use Blomstra\Horizon\Dispatcher\Notifier;
@@ -24,13 +34,13 @@ class HorizonServiceProvider extends Provider
         $paths = resolve(Paths::class);
 
         if (!defined('HORIZON_PATH')) {
-            define('HORIZON_PATH', realpath($paths->vendor . '/laravel/horizon'));
+            define('HORIZON_PATH', realpath($paths->vendor.'/laravel/horizon'));
         }
 
         SupervisorCommandString::$command = str_replace('artisan', 'flarum', SupervisorCommandString::$command);
-        WorkerCommandString::$command     = str_replace('artisan', 'flarum', WorkerCommandString::$command);
+        WorkerCommandString::$command = str_replace('artisan', 'flarum', WorkerCommandString::$command);
 
-        require_once __DIR__ . '/../helpers.php';
+        require_once __DIR__.'/../helpers.php';
 
         $this->configure();
     }
@@ -51,7 +61,7 @@ class HorizonServiceProvider extends Provider
     {
         if (!$this->app->bound(Notifications::class)) {
             $this->app->singleton(Notifications::class, function () {
-                return new Notifier;
+                return new Notifier();
             });
         }
     }
@@ -79,8 +89,7 @@ class HorizonServiceProvider extends Provider
         });
 
         $this->app->extend(CacheFactory::class, function () {
-            return new class implements CacheFactory
-            {
+            return new class() implements CacheFactory {
                 public function store($name = null)
                 {
                     return resolve('cache.store');
@@ -106,7 +115,7 @@ class HorizonServiceProvider extends Provider
 
         $env = $container->make('env');
 
-        $config = include $paths->vendor . '/laravel/horizon/config/horizon.php';
+        $config = include $paths->vendor.'/laravel/horizon/config/horizon.php';
 
         Arr::set($config, 'env', $env);
         Arr::set($config, 'path', 'admin/horizon');
@@ -119,8 +128,8 @@ class HorizonServiceProvider extends Provider
                     'balance'    => 'auto',
                     'processes'  => 4,
                     'tries'      => 3,
-                ]
-            ]
+                ],
+            ],
         ]);
 
         /** @var Repository $repository */
@@ -131,7 +140,7 @@ class HorizonServiceProvider extends Provider
         // Load existing config items and merge these with a possible key in the config.php.
         // Precedence: existing keys from local extenders, config.php and the default horizon.php.
         $existing = $repository->get('horizon', []);
-        $config   = array_merge($config, $flarumConfig['horizon'] ?? [], $existing);
+        $config = array_merge($config, $flarumConfig['horizon'] ?? [], $existing);
 
         $repository->set(['horizon' => $config]);
     }
@@ -146,16 +155,13 @@ class HorizonServiceProvider extends Provider
 
     public function defineAssetPublishing()
     {
-
     }
 
     protected function offerPublishing()
     {
-
     }
 
     protected function registerCommands()
     {
-
     }
 }

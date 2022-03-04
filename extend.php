@@ -1,9 +1,17 @@
 <?php
 
+/*
+ * This file is part of blomstra/horizon.
+ *
+ * Copyright (c) Bokt.
+ * Copyright (c) Blomstra Ltd.
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
 namespace Blomstra\Horizon;
 
-use Blomstra\Horizon\Api;
-use Blomstra\Horizon\Http;
 use Blomstra\Redis\Extend\Bindings;
 use Flarum\Extend as Flarum;
 use Illuminate\Console\Scheduling\Event;
@@ -11,14 +19,14 @@ use Laravel\Horizon\Console as Laravel;
 
 return [
     (new Flarum\Frontend('admin'))
-        ->js(__DIR__ . '/js/dist/admin.js')
-        ->css(__DIR__. '/resources/less/admin.less'),
+        ->js(__DIR__.'/js/dist/admin.js')
+        ->css(__DIR__.'/resources/less/admin.less'),
 
-    new Bindings,
-    (new Flarum\ServiceProvider)
+    new Bindings(),
+    (new Flarum\ServiceProvider())
         ->register(Providers\HorizonServiceProvider::class),
 
-    (new Flarum\Console)
+    (new Flarum\Console())
         ->command(Laravel\HorizonCommand::class)
         ->command(Laravel\ListCommand::class)
         ->command(Laravel\PurgeCommand::class)
@@ -55,8 +63,8 @@ return [
         ->get('/horizon', 'horizon.index', Http\Home::class)
         ->get('/horizon/{view:.*}', 'horizon.index.view', Http\Home::class),
     // Assets
-    new Extend\PublishAssets,
+    new Extend\PublishAssets(),
 
     (new Flarum\View())
-        ->namespace('horizon', __DIR__.'/resources/views')
+        ->namespace('horizon', __DIR__.'/resources/views'),
 ];

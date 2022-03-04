@@ -1,13 +1,23 @@
 <?php
 
+/*
+ * This file is part of blomstra/horizon.
+ *
+ * Copyright (c) Bokt.
+ * Copyright (c) Blomstra Ltd.
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
 namespace Blomstra\Horizon\Http;
 
 use Flarum\Frontend\Frontend;
 use Illuminate\Contracts\View\Factory;
+use Laminas\Diactoros\Response\HtmlResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Laminas\Diactoros\Response\HtmlResponse;
 
 class Home implements RequestHandlerInterface
 {
@@ -29,9 +39,9 @@ class Home implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         return new HtmlResponse($this->view->make('horizon::layout', [
-            'cssFile' => 'app.css',
+            'cssFile'                => 'app.css',
             'horizonScriptVariables' => [
-                'path' => 'admin/horizon'
+                'path' => 'admin/horizon',
             ],
         ])->render());
     }

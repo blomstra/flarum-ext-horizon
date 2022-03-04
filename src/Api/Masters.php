@@ -1,14 +1,23 @@
 <?php
 
+/*
+ * This file is part of blomstra/horizon.
+ *
+ * Copyright (c) Bokt.
+ * Copyright (c) Blomstra Ltd.
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
 namespace Blomstra\Horizon\Api;
 
+use Laminas\Diactoros\Response\JsonResponse;
 use Laravel\Horizon\Contracts\MasterSupervisorRepository;
 use Laravel\Horizon\Contracts\SupervisorRepository;
-use Laravel\Horizon\Contracts\WorkloadRepository;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Laminas\Diactoros\Response\JsonResponse;
 
 class Masters implements RequestHandlerInterface
 {
@@ -26,6 +35,7 @@ class Masters implements RequestHandlerInterface
         $this->masters = $masters;
         $this->supervisors = $supervisors;
     }
+
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         return new JsonResponse($this->index());
