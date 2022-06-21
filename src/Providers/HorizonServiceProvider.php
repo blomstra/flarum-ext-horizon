@@ -73,7 +73,7 @@ class HorizonServiceProvider extends Provider
 
     protected function configure()
     {
-        $this->app->extend('flarum.queue.connection', function (\Illuminate\Queue\RedisQueue $queue) {
+        $this->app->extend('flarum.queue.connection', function ($queue) {
             /** @var RedisManager $manager */
             $manager = $this->app->make(Factory::class);
             $queue = new RedisQueue($manager);
