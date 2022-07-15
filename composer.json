@@ -23,7 +23,7 @@
     },
     "require": {
         "flarum/core": "^1.2.0",
-        "laravel/horizon": "*",
+        "laravel/horizon": "^5.9",
         "blomstra/flarum-redis": "^0.4.2",
         "vlucas/phpdotenv": "^5.2"
     },
