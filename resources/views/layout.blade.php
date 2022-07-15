@@ -9,7 +9,7 @@
 
     <!-- Style sheets-->
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
-    <link href="/assets/horizon/{{$cssFile}}" rel="stylesheet" type="text/css">
+    <link href="{{$assetsUrl}}/horizon/{{$cssFile}}" rel="stylesheet" type="text/css">
 </head>
 <body>
 <div id="horizon" v-cloak>
@@ -93,6 +93,6 @@
     window.Horizon = @json($horizonScriptVariables);
 </script>
 
-<script src="/assets/horizon/app.js"></script>
+<script src="{{$assetsUrl}}/horizon/app.js"></script>
 </body>
 </html>

@@ -13,6 +13,7 @@
 namespace Blomstra\Horizon\Http;
 
 use Flarum\Frontend\Frontend;
+use Flarum\Http\UrlGenerator;
 use Illuminate\Contracts\View\Factory;
 use Laminas\Diactoros\Response\HtmlResponse;
 use Psr\Http\Message\ResponseInterface;
@@ -30,10 +31,16 @@ class Home implements RequestHandlerInterface
      */
     private $frontend;
 
-    public function __construct(Factory $view, Frontend $frontend)
+    /**
+     * @var UrlGenerator
+     */
+    private $url;
+
+    public function __construct(Factory $view, Frontend $frontend, UrlGenerator $url)
     {
         $this->view = $view;
         $this->frontend = $frontend;
+        $this->url = $url;
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface
@@ -43,6 +50,7 @@ class Home implements RequestHandlerInterface
             'horizonScriptVariables' => [
                 'path' => 'admin/horizon',
             ],
+            'assetsUrl'                    => $this->url->to('forum')->base() . '/assets',    
         ])->render());
     }
 }
