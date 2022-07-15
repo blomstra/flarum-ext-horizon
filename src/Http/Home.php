@@ -56,7 +56,7 @@ class Home implements RequestHandlerInterface
         return new HtmlResponse($this->view->make('horizon::layout', [
             'cssFile'                => 'app.css',
             'horizonScriptVariables' => [
-                'path' => $this->url->to('admin')->base().'/horizon',
+                'path' => 'admin/horizon',
             ],
             'assetsUrl'                    => $this->assetsDir->url('/'),
         ])->render());

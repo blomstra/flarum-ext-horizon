@@ -15,6 +15,7 @@ namespace Blomstra\Horizon\Providers;
 use Blomstra\Horizon\Dispatcher\Notifier;
 use Blomstra\Horizon\Overrides\RedisQueue;
 use Blomstra\Redis\Overrides\RedisManager;
+use Flarum\Foundation\Config;
 use Flarum\Foundation\Paths;
 use Illuminate\Contracts\Cache\Factory as CacheFactory;
 use Illuminate\Contracts\Config\Repository;
@@ -113,12 +114,15 @@ class HorizonServiceProvider extends Provider
         /** @var Paths $paths */
         $paths = resolve(Paths::class);
 
+        /** @var Config */
+        $flarumConfig = resolve(Config::class);
+
         $env = $container->make('env');
 
         $config = include $paths->vendor.'/laravel/horizon/config/horizon.php';
 
         Arr::set($config, 'env', $env);
-        Arr::set($config, 'path', 'admin/horizon');
+        Arr::set($config, 'path', $flarumConfig->url()->getPath().'admin/horizon'); //resolve url, paths->
         Arr::set($config, 'use', 'horizon');
         Arr::set($config, 'environments', [
             $env => [
