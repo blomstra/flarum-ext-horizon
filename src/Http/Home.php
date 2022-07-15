@@ -60,7 +60,7 @@ class Home implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         return new HtmlResponse($this->view->make('horizon::layout', [
-            'assetsAreCurrent'             => $this->config->inDebugMode(),
+            'assetsAreCurrent'             => !$this->config->inDebugMode(),
             'cssFile'                      => 'app.css', // TODO: support fof/nightmode
             'horizonScriptVariables'       => Horizon::scriptVariables(),
             'isDownForMaintenance'         => $this->config->inMaintenanceMode(),

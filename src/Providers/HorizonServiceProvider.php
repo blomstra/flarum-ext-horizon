@@ -17,11 +17,13 @@ use Blomstra\Horizon\Overrides\RedisQueue;
 use Blomstra\Redis\Overrides\RedisManager;
 use Flarum\Foundation\Config;
 use Flarum\Foundation\Paths;
+use Flarum\Http\UrlGenerator;
 use Illuminate\Contracts\Cache\Factory as CacheFactory;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Notifications\Dispatcher as Notifications;
 use Illuminate\Contracts\Redis\Factory;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Laravel\Horizon\Events\LongWaitDetected;
 use Laravel\Horizon\HorizonServiceProvider as Provider;
 use Laravel\Horizon\SupervisorCommandString;
@@ -117,12 +119,17 @@ class HorizonServiceProvider extends Provider
         /** @var Config */
         $flarumConfig = resolve(Config::class);
 
+        /** @var UrlGenerator */
+        $url = resolve(UrlGenerator::class);
+
         $env = $container->make('env');
 
         $config = include $paths->vendor.'/laravel/horizon/config/horizon.php';
 
+        $path = Str::after($url->to('admin')->base(), $flarumConfig->url()->getHost());
+
         Arr::set($config, 'env', $env);
-        Arr::set($config, 'path', $flarumConfig->url()->getPath().'/admin/horizon');
+        Arr::set($config, 'path', trim($path, '/').'/horizon');
         Arr::set($config, 'use', 'horizon');
         Arr::set($config, 'environments', [
             $env => [
