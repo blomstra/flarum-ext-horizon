@@ -122,7 +122,7 @@ class HorizonServiceProvider extends Provider
         $config = include $paths->vendor.'/laravel/horizon/config/horizon.php';
 
         Arr::set($config, 'env', $env);
-        Arr::set($config, 'path', '/'.$flarumConfig->url()->getPath().'/admin/horizon');
+        Arr::set($config, 'path', $flarumConfig->url()->getPath().'/admin/horizon');
         Arr::set($config, 'use', 'horizon');
         Arr::set($config, 'environments', [
             $env => [
