@@ -13,6 +13,8 @@
 namespace Blomstra\Horizon\Http;
 
 use Flarum\Frontend\Frontend;
+use Illuminate\Contracts\Filesystem\Factory as FilesystemFactory;
+use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Contracts\View\Factory;
 use Laminas\Diactoros\Response\HtmlResponse;
 use Psr\Http\Message\ResponseInterface;
@@ -30,10 +32,16 @@ class Home implements RequestHandlerInterface
      */
     private $frontend;
 
-    public function __construct(Factory $view, Frontend $frontend)
+    /**
+     * @var Filesystem
+     */
+    private $assetsDir;
+
+    public function __construct(Factory $view, Frontend $frontend, FilesystemFactory $filesystem)
     {
         $this->view = $view;
         $this->frontend = $frontend;
+        $this->assetsDir = $filesystem->disk('flarum-assets');
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface
@@ -43,6 +51,7 @@ class Home implements RequestHandlerInterface
             'horizonScriptVariables' => [
                 'path' => 'admin/horizon',
             ],
+            'assetsUrl'                    => $this->assetsDir->url('/'),
         ])->render());
     }
 }
