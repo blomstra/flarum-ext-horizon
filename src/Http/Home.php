@@ -50,7 +50,7 @@ class Home implements RequestHandlerInterface
             'horizonScriptVariables' => [
                 'path' => 'admin/horizon',
             ],
-            'assetsUrl'                    => $this->url->to('forum')->base() . '/assets',    
+            'assetsUrl'                    => $this->url->to('forum')->base().'/assets',
         ])->render());
     }
 }
