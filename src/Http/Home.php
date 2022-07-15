@@ -14,6 +14,7 @@ namespace Blomstra\Horizon\Http;
 
 use Flarum\Frontend\Frontend;
 use Illuminate\Contracts\Filesystem\Factory as FilesystemFactory;
+use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Contracts\View\Factory;
 use Laminas\Diactoros\Response\HtmlResponse;
 use Psr\Http\Message\ResponseInterface;
