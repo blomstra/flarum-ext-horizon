@@ -22,35 +22,23 @@ use Illuminate\Contracts\Filesystem\Factory;
 
 class PublishAssets implements LifecycleInterface, ExtenderInterface
 {
-    /**
-     * @var string
-     */
-    private $from;
-
-    /**
-     * @var Cloud
-     */
-    private $assetsDisk;
-
-    public function __construct()
+    protected function resolveDisk(Container $container): Cloud
     {
-        $paths = resolve(Paths::class);
-        $factory = resolve(Factory::class);
-
-        $this->from = $paths->vendor.'/laravel/horizon/public';
-        $this->assetsDisk = $factory->disk('flarum-assets');
+        return $container->make(Factory::class)->disk('flarum-assets');
     }
 
     public function onEnable(Container $container, Extension $extension)
     {
+        $from = $container->make(Paths::class)->vendor.'/laravel/horizon/public';
+
         if ($extension->name === 'blomstra/horizon') {
 
             /** @var \Illuminate\Filesystem\Filesystem $localFilesystem */
             $localFilesystem = $container->make('files');
 
-            foreach ($localFilesystem->allFiles($this->from) as $file) {
+            foreach ($localFilesystem->allFiles($from) as $file) {
                 /** @var \Symfony\Component\Finder\SplFileInfo $file */
-                $this->assetsDisk->put('horizon/'.$file->getRelativePathname(), $file->getContents());
+                $this->resolveDisk($container)->put('horizon/'.$file->getRelativePathname(), $file->getContents());
             }
         }
     }
@@ -58,7 +46,7 @@ class PublishAssets implements LifecycleInterface, ExtenderInterface
     public function onDisable(Container $container, Extension $extension)
     {
         if ($extension->name === 'blomstra/horizon') {
-            $this->assetsDisk->deleteDirectory('horizon');
+            $this->resolveDisk($container)->deleteDirectory('horizon');
         }
     }
 
