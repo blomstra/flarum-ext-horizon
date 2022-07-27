@@ -67,4 +67,8 @@ return [
 
     (new Flarum\View())
         ->namespace('horizon', __DIR__.'/resources/views'),
+
+    (new Flarum\Event())
+        // Required only until Flarum 1.5 - https://github.com/flarum/framework/pull/3565
+        ->subscribe(QueueRestarter::class),
 ];
