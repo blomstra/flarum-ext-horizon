@@ -1,5 +1,15 @@
 <?php
 
+/*
+ * This file is part of blomstra/horizon.
+ *
+ * Copyright (c) Bokt.
+ * Copyright (c) Blomstra Ltd.
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
 namespace Blomstra\Horizon;
 
 use Flarum\Extension\Event\Disabled;
@@ -13,7 +23,7 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
 
 /**
- * Required only until Flarum 1.5 - https://github.com/flarum/framework/pull/3565
+ * Required only until Flarum 1.5 - https://github.com/flarum/framework/pull/3565.
  */
 class QueueRestarter
 {
@@ -37,7 +47,7 @@ class QueueRestarter
     {
         $events->listen([
             ClearingCache::class, Saved::class,
-            Enabled::class, Disabled::class
+            Enabled::class, Disabled::class,
         ], [$this, 'restart']);
     }
 
@@ -47,7 +57,7 @@ class QueueRestarter
 
         $this->command->run(
             new ArrayInput([]),
-            new NullOutput
+            new NullOutput()
         );
     }
 }
