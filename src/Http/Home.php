@@ -15,8 +15,8 @@ namespace Blomstra\Horizon\Http;
 use Flarum\Foundation\Config;
 use Flarum\Frontend\Frontend;
 use Flarum\Http\UrlGenerator;
+use Illuminate\Contracts\Filesystem\Cloud;
 use Illuminate\Contracts\Filesystem\Factory as FilesystemFactory;
-use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Contracts\View\Factory;
 use Laminas\Diactoros\Response\HtmlResponse;
 use Laravel\Horizon\Horizon;
@@ -36,7 +36,7 @@ class Home implements RequestHandlerInterface
     private $frontend;
 
     /**
-     * @var Filesystem
+     * @var Cloud
      */
     private $assetsDir;
 
@@ -64,7 +64,7 @@ class Home implements RequestHandlerInterface
             'cssFile'                      => 'app.css', // TODO: support fof/nightmode
             'horizonScriptVariables'       => Horizon::scriptVariables(),
             'isDownForMaintenance'         => $this->config->inMaintenanceMode(),
-            'assetsUrl'                    => $this->assetsDir->url('/'),
+            'assetsUrl'                    => $this->assetsDir->url(''),
         ])->render());
     }
 }
