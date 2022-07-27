@@ -175,4 +175,8 @@ class HorizonServiceProvider extends Provider
     protected function registerCommands()
     {
     }
+
+    protected function registerResources()
+    {
+    }
 }
