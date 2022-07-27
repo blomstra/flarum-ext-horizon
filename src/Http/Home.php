@@ -64,7 +64,7 @@ class Home implements RequestHandlerInterface
             'cssFile'                      => 'app.css', // TODO: support fof/nightmode
             'horizonScriptVariables'       => Horizon::scriptVariables(),
             'isDownForMaintenance'         => $this->config->inMaintenanceMode(),
-            'assetsUrl'                    => $this->assetsDir->url('/'),
+            'assetsUrl'                    => $this->assetsDir->url(''),
         ])->render());
     }
 }
