@@ -28,7 +28,6 @@ class PublishAssets implements LifecycleInterface, ExtenderInterface
     private $from;
 
     /**
-     *
      * @var Cloud
      */
     private $assetsDisk;
@@ -37,7 +36,7 @@ class PublishAssets implements LifecycleInterface, ExtenderInterface
     {
         $paths = resolve(Paths::class);
         $factory = resolve(Factory::class);
-        
+
         $this->from = $paths->vendor.'/laravel/horizon/public';
         $this->assetsDisk = $factory->disk('flarum-assets');
     }
@@ -45,7 +44,7 @@ class PublishAssets implements LifecycleInterface, ExtenderInterface
     public function onEnable(Container $container, Extension $extension)
     {
         if ($extension->name === 'blomstra/horizon') {
-            
+
             /** @var \Illuminate\Filesystem\Filesystem $localFilesystem */
             $localFilesystem = $container->make('files');
 
