@@ -23,7 +23,6 @@ use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Notifications\Dispatcher as Notifications;
 use Illuminate\Contracts\Redis\Factory;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 use Laminas\Diactoros\Uri;
 use Laravel\Horizon\Events\LongWaitDetected;
 use Laravel\Horizon\HorizonServiceProvider as Provider;
