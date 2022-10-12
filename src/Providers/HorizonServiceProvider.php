@@ -24,6 +24,7 @@ use Illuminate\Contracts\Notifications\Dispatcher as Notifications;
 use Illuminate\Contracts\Redis\Factory;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Laminas\Diactoros\Uri;
 use Laravel\Horizon\Events\LongWaitDetected;
 use Laravel\Horizon\HorizonServiceProvider as Provider;
 use Laravel\Horizon\SupervisorCommandString;
@@ -126,7 +127,7 @@ class HorizonServiceProvider extends Provider
 
         $config = include $paths->vendor.'/laravel/horizon/config/horizon.php';
 
-        $path = Str::after($url->to('admin')->base(), $flarumConfig->url()->getHost());
+        $path = (new Uri($url->to('admin')->base()))->getPath();
 
         Arr::set($config, 'env', $env);
         Arr::set($config, 'path', trim($path, '/').'/horizon');
