@@ -32,7 +32,6 @@ class PublishAssets implements LifecycleInterface, ExtenderInterface
         $from = $container->make(Paths::class)->vendor.'/laravel/horizon/public';
 
         if ($extension->name === 'blomstra/horizon') {
-
             /** @var \Illuminate\Filesystem\Filesystem $localFilesystem */
             $localFilesystem = $container->make('files');
 

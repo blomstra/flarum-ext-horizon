@@ -66,7 +66,7 @@ class FailedJobs implements RequestHandlerInterface
     {
         $jobIds = $this->tags->paginate(
             'failed:'.$tag,
-            (Arr::get($request->getQueryParams(), 'starting_at', -1)) + 1,
+            Arr::get($request->getQueryParams(), 'starting_at', -1) + 1,
             50
         );
 
