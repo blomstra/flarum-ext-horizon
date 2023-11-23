@@ -20,7 +20,8 @@ use Laravel\Horizon\Console as Laravel;
 return [
     (new Flarum\Frontend('admin'))
         ->js(__DIR__.'/js/dist/admin.js')
-        ->css(__DIR__.'/resources/less/admin.less'),
+        ->css(__DIR__.'/resources/less/admin.less')
+        ->content(Content\AdminContent::class),
 
     new Bindings(),
     (new Flarum\ServiceProvider())

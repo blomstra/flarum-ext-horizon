@@ -20,7 +20,7 @@ see errors pop up.
 Install manually with composer:
 
 ```sh
-composer require blomstra/horizon:*
+composer require blomstra/horizon:"*"
 ```
 
 ### Set up
