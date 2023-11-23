@@ -47,6 +47,11 @@
         },
         "extiverse": {
             "discuss": "https://discuss.flarum.org/d/27520"
+        },
+        "flarum-cli": {
+            "modules": {
+                "githubActions": true
+            }
         }
     }
 }
