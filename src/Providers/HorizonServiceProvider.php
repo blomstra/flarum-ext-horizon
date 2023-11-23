@@ -83,6 +83,7 @@ class HorizonServiceProvider extends Provider
             /** @var RedisManager $manager */
             $manager = $this->app->make(Factory::class);
             $queue = new RedisQueue($manager);
+            /** @phpstan-ignore-next-line */
             $queue->setContainer($this->app);
 
             return $queue;
