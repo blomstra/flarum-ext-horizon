@@ -1,5 +1,15 @@
 <?php
 
+/*
+ * This file is part of blomstra/horizon.
+ *
+ * Copyright (c) Bokt.
+ * Copyright (c) Blomstra Ltd.
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
 namespace Blomstra\Horizon\Api;
 
 use Laminas\Diactoros\Response\JsonResponse;
@@ -16,7 +26,7 @@ class SilencedJobs implements RequestHandlerInterface
     {
         $this->jobs = $jobs;
     }
-    
+
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $jobs = $this->jobs->getSilenced($request->getQueryParams()['starting_at'] ?? -1)->map(function ($job) {
@@ -26,7 +36,7 @@ class SilencedJobs implements RequestHandlerInterface
         })->values();
 
         return new JsonResponse([
-            'jobs' => $jobs,
+            'jobs'  => $jobs,
             'total' => $this->jobs->countSilenced(),
         ]);
     }

@@ -1,5 +1,15 @@
 <?php
 
+/*
+ * This file is part of blomstra/horizon.
+ *
+ * Copyright (c) Bokt.
+ * Copyright (c) Blomstra Ltd.
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
 namespace Blomstra\Horizon\Api;
 
 use Illuminate\Bus\BatchRepository;
@@ -19,17 +29,17 @@ class Batch implements RequestHandlerInterface
         $this->jobs = $jobs;
         $this->batches = $batches;
     }
-    
+
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $id = $request->getAttribute('id');
-        
+
         $batch = $this->batches->find($id);
 
         $failedJobs = $this->jobs->getJobs($batch->failedJobIds);
 
         return new JsonResponse([
-            'batch' => $batch,
+            'batch'      => $batch,
             'failedJobs' => $failedJobs,
         ]);
     }

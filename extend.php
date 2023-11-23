@@ -24,7 +24,7 @@ return [
         ->content(Content\AdminContent::class),
 
     new Bindings(),
-    
+
     (new Flarum\ServiceProvider())
         ->register(Providers\HorizonServiceProvider::class),
 
@@ -74,7 +74,7 @@ return [
         ->get('/horizon/api/jobs/failed/{id}', 'horizon.failed-jobs.show', Api\FailedJob::class)
         ->post('/horizon/api/jobs/retry/{id}', 'horizon.retry-jobs.show', Api\RetryJob::class)
         ->get('/horizon/api/jobs/{id}', 'horizon.jobs.show', Api\Job::class)
-        
+
         ->get('/horizon', 'horizon.index', Http\Home::class)
         ->get('/horizon/{view:.*}', 'horizon.index.view', Http\Home::class),
     // Assets

@@ -115,6 +115,7 @@ class HorizonServiceProvider extends Provider
 
         $this->app->bind(BatchRepository::class, function () {
             $factory = resolve(BatchFactory::class);
+
             return new DatabaseBatchRepository(
                 $factory,
                 $this->app->make('db')->connection(),
