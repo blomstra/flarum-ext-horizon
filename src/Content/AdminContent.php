@@ -1,5 +1,15 @@
 <?php
 
+/*
+ * This file is part of blomstra/horizon.
+ *
+ * Copyright (c) Bokt.
+ * Copyright (c) Blomstra Ltd.
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
 namespace Blomstra\Horizon\Content;
 
 use Blomstra\Redis\Overrides\RedisManager;
@@ -13,12 +23,12 @@ class AdminContent
      * @var RedisManager
      */
     protected $redis;
-    
+
     public function __construct(RedisManager $redis)
     {
         $this->redis = $redis;
     }
-    
+
     public function __invoke(Document $document, ServerRequestInterface $request): void
     {
         $document->payload['redisVersion'] = $this->getRedisVersion();
@@ -28,6 +38,6 @@ class AdminContent
     {
         $info = $this->redis->connection()->info();
 
-		return Arr::get($info, 'Server.redis_version', 'unknown');
+        return Arr::get($info, 'Server.redis_version', 'unknown');
     }
 }
