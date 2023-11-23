@@ -18,7 +18,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-class RecentJobs implements RequestHandlerInterface
+class Job implements RequestHandlerInterface
 {
     /**
      * @var JobRepository
@@ -32,15 +32,12 @@ class RecentJobs implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $jobs = $this->jobs->getRecent($request->getQueryParams()['starting_at'] ?? -1)->map(function ($job) {
+        $job = (array) $this->jobs->getJobs([$request->getQueryParams()['id']])->map(function ($job) {
             $job->payload = json_decode($job->payload);
 
             return $job;
-        })->values();
+        })->first();
 
-        return new JsonResponse([
-            'jobs'  => $jobs,
-            'total' => $this->jobs->countRecent(),
-        ]);
+        return new JsonResponse($job);
     }
 }

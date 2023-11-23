@@ -18,12 +18,9 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-class RecentJob implements RequestHandlerInterface
+class SilencedJobs implements RequestHandlerInterface
 {
-    /**
-     * @var JobRepository
-     */
-    private $jobs;
+    public $jobs;
 
     public function __construct(JobRepository $jobs)
     {
@@ -32,12 +29,15 @@ class RecentJob implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $job = (array) $this->jobs->getJobs([$request->getQueryParams()['id']])->map(function ($job) {
+        $jobs = $this->jobs->getSilenced($request->getQueryParams()['starting_at'] ?? -1)->map(function ($job) {
             $job->payload = json_decode($job->payload);
 
             return $job;
-        })->first();
+        })->values();
 
-        return new JsonResponse($job);
+        return new JsonResponse([
+            'jobs'  => $jobs,
+            'total' => $this->jobs->countSilenced(),
+        ]);
     }
 }

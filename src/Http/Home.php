@@ -13,8 +13,6 @@
 namespace Blomstra\Horizon\Http;
 
 use Flarum\Foundation\Config;
-use Flarum\Frontend\Frontend;
-use Flarum\Http\UrlGenerator;
 use Illuminate\Contracts\Filesystem\Cloud;
 use Illuminate\Contracts\Filesystem\Factory as FilesystemFactory;
 use Illuminate\Contracts\View\Factory;
@@ -30,10 +28,6 @@ class Home implements RequestHandlerInterface
      * @var Factory
      */
     private $view;
-    /**
-     * @var Frontend
-     */
-    private $frontend;
 
     /**
      * @var Cloud
@@ -41,19 +35,14 @@ class Home implements RequestHandlerInterface
     private $assetsDir;
 
     /**
-     * @var UrlGenerator
+     * @var Config
      */
-    private $url;
-
-    /** @var Config */
     private $config;
 
-    public function __construct(Factory $view, Frontend $frontend, FilesystemFactory $filesystem, UrlGenerator $url, Config $config)
+    public function __construct(Factory $view, FilesystemFactory $filesystem, Config $config)
     {
         $this->view = $view;
-        $this->frontend = $frontend;
         $this->assetsDir = $filesystem->disk('flarum-assets');
-        $this->url = $url;
         $this->config = $config;
     }
 
@@ -61,7 +50,8 @@ class Home implements RequestHandlerInterface
     {
         return new HtmlResponse($this->view->make('horizon::layout', [
             'assetsAreCurrent'             => !$this->config->inDebugMode(),
-            'cssFile'                      => 'app.css', // TODO: support fof/nightmode
+            'cssFileLight'                 => 'app.css',
+            'cssFileDark'                  => 'app-dark.css',
             'horizonScriptVariables'       => Horizon::scriptVariables(),
             'isDownForMaintenance'         => $this->config->inMaintenanceMode(),
             'assetsUrl'                    => $this->assetsDir->url(''),
