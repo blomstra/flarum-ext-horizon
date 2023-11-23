@@ -66,6 +66,8 @@ return [
         ->get('/horizon/api/metrics/queues/{id}', 'horizon.queues-metrics.show', Api\QueueJobMetrics::class)
         // Batches Routes...
         ->get('/horizon/api/batches', 'horizon.jobs-batches.index', Api\Batches::class)
+        ->get('/horizon/api/batches/{id}', 'horizon.jobs-batches.show', Api\Batch::class)
+        ->post('/horizon/api/batches/retry/{id}', 'horizon.jobs-batches.retry', Api\RetryBatch::class)
         // Job Routes...
         ->get('/horizon/api/jobs/pending', 'horizon.pending-jobs.index', Api\PendingJobs::class)
         ->get('/horizon/api/jobs/completed', 'horizon.completed-jobs.index', Api\CompletedJobs::class)
