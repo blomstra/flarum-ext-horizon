@@ -13,6 +13,7 @@
 namespace Blomstra\Horizon\Http;
 
 use Flarum\Foundation\Config;
+use Flarum\Settings\SettingsRepositoryInterface;
 use Illuminate\Contracts\Filesystem\Cloud;
 use Illuminate\Contracts\Filesystem\Factory as FilesystemFactory;
 use Illuminate\Contracts\View\Factory;
@@ -39,11 +40,17 @@ class Home implements RequestHandlerInterface
      */
     private $config;
 
-    public function __construct(Factory $view, FilesystemFactory $filesystem, Config $config)
+    /**
+     * @var SettingsRepositoryInterface
+     */
+    private $settings;
+
+    public function __construct(Factory $view, FilesystemFactory $filesystem, Config $config, SettingsRepositoryInterface $settings)
     {
         $this->view = $view;
         $this->assetsDir = $filesystem->disk('flarum-assets');
         $this->config = $config;
+        $this->settings = $settings;
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface
@@ -55,6 +62,7 @@ class Home implements RequestHandlerInterface
             'horizonScriptVariables'       => Horizon::scriptVariables(),
             'isDownForMaintenance'         => $this->config->inMaintenanceMode(),
             'assetsUrl'                    => $this->assetsDir->url(''),
+            'forumTitle'                   => $this->settings->get('forum_title'),
         ])->render());
     }
 }

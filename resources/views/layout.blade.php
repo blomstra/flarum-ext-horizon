@@ -30,7 +30,7 @@
                 </svg>
             </div>
 
-            <h4 class="h4 mb-0 ml-2"><strong>Laravel</strong> Horizon</h4>
+            <h4 class="h4 mb-0 ml-2"><strong>Laravel</strong> Horizon - {{$forumTitle}}</h4>
 
             <div class="ml-auto">
                 <scheme-toggler></scheme-toggler>
