@@ -22,8 +22,8 @@
         "source": "https://github.com/blomstra/flarum-ext-horizon"
     },
     "require": {
-        "flarum/core": "^1.5",
-        "laravel/horizon": "^5.9",
+        "flarum/core": "^1.8",
+        "laravel/horizon": "^5.21.3",
         "blomstra/flarum-redis": "^0.4.2",
         "vlucas/phpdotenv": "^5.2"
     },

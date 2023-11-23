@@ -61,7 +61,8 @@ class Home implements RequestHandlerInterface
     {
         return new HtmlResponse($this->view->make('horizon::layout', [
             'assetsAreCurrent'             => !$this->config->inDebugMode(),
-            'cssFile'                      => 'app.css', // TODO: support fof/nightmode
+            'cssFileLight'                 => 'app.css',
+            'cssFileDark'                  => 'app-dark.css',
             'horizonScriptVariables'       => Horizon::scriptVariables(),
             'isDownForMaintenance'         => $this->config->inMaintenanceMode(),
             'assetsUrl'                    => $this->assetsDir->url(''),
