@@ -34,8 +34,8 @@ class Home implements RequestHandlerInterface
      */
     private $assetsDir;
 
-    /** 
-     * @var Config 
+    /**
+     * @var Config
      */
     private $config;
 
