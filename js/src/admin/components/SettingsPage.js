@@ -9,7 +9,7 @@ export default class SettingsPage extends ExtensionPage {
       <div className="container">
         <div className="HorizonSettingsPage">
           <LinkButton icon="fas fa-external-link-alt" className="Button" href={horizonUrl} external={true} target="_blank">
-            Horizon dashboard
+            {app.translator.trans('blomstra-horizon.admin.stats.full_dashboard')}
           </LinkButton>
         </div>
       </div>
