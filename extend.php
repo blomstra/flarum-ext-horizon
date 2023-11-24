@@ -23,6 +23,8 @@ return [
         ->css(__DIR__.'/resources/less/admin.less')
         ->content(Content\AdminContent::class),
 
+    new Flarum\Locales(__DIR__.'/resources/locale'),
+
     new Bindings(),
 
     (new Flarum\ServiceProvider())
