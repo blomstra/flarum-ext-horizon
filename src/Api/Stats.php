@@ -12,7 +12,9 @@
 
 namespace Blomstra\Horizon\Api;
 
+use Blomstra\Redis\Overrides\RedisManager;
 use Illuminate\Contracts\Config\Repository;
+use Illuminate\Support\Arr;
 use Laminas\Diactoros\Response\JsonResponse;
 use Laravel\Horizon\Contracts\JobRepository;
 use Laravel\Horizon\Contracts\MasterSupervisorRepository;
@@ -25,11 +27,20 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class Stats implements RequestHandlerInterface
 {
+    /**
+     * @var Repository
+     */
     private $config;
 
-    public function __construct(Repository $config)
+    /**
+     * @var RedisManager
+     */
+    private $redis;
+
+    public function __construct(Repository $config, RedisManager $redis)
     {
         $this->config = $config;
+        $this->redis = $redis;
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface
@@ -46,6 +57,13 @@ class Stats implements RequestHandlerInterface
             'periods'                => [
                 'recentJobs'     => $this->config->get('horizon.trim.recent'),
                 'recentlyFailed' => $this->config->get('horizon.trim.failed'),
+            ],
+            'redis_stats'            => [
+                'memory_used' => Arr::get($this->getInfo(), 'Memory.used_memory_human', 0),
+                'memory_peak' => Arr::get($this->getInfo(), 'Memory.used_memory_peak_human', 0),
+                'memory_max'  => Arr::get($this->getInfo(), 'Memory.maxmemory', 0),
+                'cpu_user'    => Arr::get($this->getInfo(), 'CPU.used_cpu_user', 0),
+                'cpu_sys'     => Arr::get($this->getInfo(), 'CPU.used_cpu_sys', 0),
             ],
         ]);
     }
@@ -68,5 +86,10 @@ class Stats implements RequestHandlerInterface
         return collect($masters)->contains(function ($master) {
             return $master->status === 'paused';
         }) ? 'paused' : 'running';
+    }
+
+    private function getInfo(): array
+    {
+        return $this->redis->connection()->info();
     }
 }

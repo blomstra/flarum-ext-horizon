@@ -18,6 +18,7 @@ use Blomstra\Redis\Overrides\RedisManager;
 use Flarum\Foundation\Config;
 use Flarum\Foundation\Paths;
 use Flarum\Http\UrlGenerator;
+use Flarum\Settings\SettingsRepositoryInterface;
 use Illuminate\Bus\BatchFactory;
 use Illuminate\Bus\BatchRepository;
 use Illuminate\Bus\DatabaseBatchRepository;
@@ -136,6 +137,9 @@ class HorizonServiceProvider extends Provider
         /** @var UrlGenerator */
         $url = resolve(UrlGenerator::class);
 
+        /** @var SettingsRepositoryInterface $settings */
+        $settings = resolve(SettingsRepositoryInterface::class);
+
         $env = $container->make('env');
 
         $config = include $paths->vendor.'/laravel/horizon/config/horizon.php';
@@ -155,6 +159,15 @@ class HorizonServiceProvider extends Provider
                     'tries'      => 3,
                 ],
             ],
+        ]);
+
+        Arr::set($config, 'trim', [
+            'recent' => $settings->get('blomstra-horizon.trim.recent'),
+            'pending' => $settings->get('blomstra-horizon.trim.pending'),
+            'completed' => $settings->get('blomstra-horizon.trim.completed'),
+            'recent_failed' => $settings->get('blomstra-horizon.trim.recent_failed'),
+            'failed' => $settings->get('blomstra-horizon.trim.failed'),
+            'monitored' => $settings->get('blomstra-horizon.trim.monitored'),
         ]);
 
         /** @var Repository $repository */

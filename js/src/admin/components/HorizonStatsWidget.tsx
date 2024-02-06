@@ -100,13 +100,19 @@ export default class HorizonStatsWidget extends DashboardWidget {
 
   renderStatsSection() {
     const { jobsPerMinute, recentJobs, recentlyFailed, status, processes, queueWithMaxRuntime, queueWithMaxThroughput } = this.data;
+    const redis_stats = this.data.redis_stats ?? {};
 
     return (
       <>
+        {this.renderStatusIndicator(status)}
+        {this.renderStat(app.translator.trans('blomstra-horizon.admin.stats.data.redis-used-memory'), redis_stats.memory_used)}
+        {this.renderStat(app.translator.trans('blomstra-horizon.admin.stats.data.redis-peak-memory'), redis_stats.memory_peak)}
+        {this.renderStat(app.translator.trans('blomstra-horizon.admin.stats.data.redis-max-memory'), redis_stats.max_memory ?? 'auto')}
+        {this.renderStat(app.translator.trans('blomstra-horizon.admin.stats.data.redis-cpu-user'), redis_stats.cpu_user + '%')}
+        {this.renderStat(app.translator.trans('blomstra-horizon.admin.stats.data.redis-cpu-sys'), redis_stats.cpu_sys + '%')}
         {this.renderStat(app.translator.trans('blomstra-horizon.admin.stats.data.jobs-per-minute'), jobsPerMinute)}
         {this.renderStat(app.translator.trans('blomstra-horizon.admin.stats.data.jobs-past-hour'), recentJobs)}
         {this.renderStat(app.translator.trans('blomstra-horizon.admin.stats.data.failed-last-seconds'), recentlyFailed)}
-        {this.renderStatusIndicator(status)}
         {this.renderStat(app.translator.trans('blomstra-horizon.admin.stats.data.total-processes'), processes)}
         {this.renderStat(app.translator.trans('blomstra-horizon.admin.stats.data.max-wait-time'), '-')}
         {this.renderStat(app.translator.trans('blomstra-horizon.admin.stats.data.max-runtime'), queueWithMaxRuntime ?? '-')}
