@@ -24,6 +24,7 @@ class Horizon implements ExtenderInterface
 
     public function extend(Container $container, Extension $extension = null)
     {
+        /** @var Repository $repository */
         $repository = $container->make(Repository::class);
 
         if ($this->config) {

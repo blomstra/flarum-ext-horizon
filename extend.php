@@ -14,6 +14,7 @@ namespace Blomstra\Horizon;
 
 use Blomstra\Redis\Extend\Bindings;
 use Flarum\Extend as Flarum;
+use Flarum\Settings\Event\Saved;
 use Illuminate\Console\Scheduling\Event;
 use Laravel\Horizon\Console as Laravel;
 
@@ -26,6 +27,14 @@ return [
     new Flarum\Locales(__DIR__.'/resources/locale'),
 
     new Bindings(),
+
+    (new Flarum\Settings())
+        ->default('blomstra-horizon.trim.recent', 60)
+        ->default('blomstra-horizon.trim.pending', 60)
+        ->default('blomstra-horizon.trim.completed', 60)
+        ->default('blomstra-horizon.trim.recent_failed', 10080)
+        ->default('blomstra-horizon.trim.failed', 10080)
+        ->default('blomstra-horizon.trim.monitored', 10080),
 
     (new Flarum\ServiceProvider())
         ->register(Providers\HorizonServiceProvider::class),

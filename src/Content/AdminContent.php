@@ -34,10 +34,13 @@ class AdminContent
         $document->payload['redisVersion'] = $this->getRedisVersion();
     }
 
+    private function getInfo(): array
+    {
+        return $this->redis->connection()->info();
+    }
+
     protected function getRedisVersion(): string
     {
-        $info = $this->redis->connection()->info();
-
-        return Arr::get($info, 'Server.redis_version', 'unknown');
+        return Arr::get($this->getInfo(), 'Server.redis_version', 'unknown');
     }
 }
