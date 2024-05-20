@@ -107,7 +107,7 @@ export default class HorizonStatsWidget extends DashboardWidget {
         {this.renderStatusIndicator(status)}
         {this.renderStat(app.translator.trans('blomstra-horizon.admin.stats.data.redis-used-memory'), redis_stats.memory_used)}
         {this.renderStat(app.translator.trans('blomstra-horizon.admin.stats.data.redis-peak-memory'), redis_stats.memory_peak)}
-        {this.renderStat(app.translator.trans('blomstra-horizon.admin.stats.data.redis-max-memory'), redis_stats.max_memory ?? 'auto')}
+        {this.renderStat(app.translator.trans('blomstra-horizon.admin.stats.data.redis-max-memory'), redis_stats.memory_max ?? 'auto')}
         {this.renderStat(app.translator.trans('blomstra-horizon.admin.stats.data.redis-cpu-user'), redis_stats.cpu_user + '%')}
         {this.renderStat(app.translator.trans('blomstra-horizon.admin.stats.data.redis-cpu-sys'), redis_stats.cpu_sys + '%')}
         {this.renderStat(app.translator.trans('blomstra-horizon.admin.stats.data.jobs-per-minute'), jobsPerMinute)}
