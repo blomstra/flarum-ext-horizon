@@ -93,7 +93,7 @@ class Stats implements RequestHandlerInterface
         return $this->redis->connection()->info();
     }
 
-    private function formatMaxMemory($maxMemory): string
+    private function formatMaxMemory(string $maxMemory): string
     {
         if ($maxMemory === '0' || $maxMemory === '0B') {
             return 'auto';
