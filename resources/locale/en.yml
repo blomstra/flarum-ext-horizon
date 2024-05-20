@@ -34,6 +34,7 @@ blomstra-horizon:
         redis-used-memory: Redis Used Memory
         redis-peak-memory: Redis Peak Memory
         redis-max-memory: Redis Max Memory
+        redis-memory-policy: Redis Memory Policy
         redis-cpu-user: Redis CPU User
         redis-cpu-sys: Redis CPU Sys
         jobs-per-minute: Jobs Per Minute

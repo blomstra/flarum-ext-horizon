@@ -62,6 +62,7 @@ class Stats implements RequestHandlerInterface
                 'memory_used' => Arr::get($this->getInfo(), 'Memory.used_memory_human', 0),
                 'memory_peak' => Arr::get($this->getInfo(), 'Memory.used_memory_peak_human', 0),
                 'memory_max'  => $this->formatMaxMemory(Arr::get($this->getInfo(), 'Memory.maxmemory_human', 0)),
+                'memory_max_policy' => Arr::get($this->getInfo(), 'Memory.maxmemory_policy', ''),
                 'cpu_user'    => Arr::get($this->getInfo(), 'CPU.used_cpu_user', 0),
                 'cpu_sys'     => Arr::get($this->getInfo(), 'CPU.used_cpu_sys', 0),
             ],
