@@ -3,11 +3,12 @@ import app from 'flarum/admin/app';
 import DashboardWidget, { IDashboardWidgetAttrs } from 'flarum/admin/components/DashboardWidget';
 import LoadingIndicator from 'flarum/common/components/LoadingIndicator';
 import Button from 'flarum/common/components/Button';
-import type Mithril from 'mithril';
+import Mithril from 'mithril';
 import LinkButton from 'flarum/common/components/LinkButton';
 import Tooltip from 'flarum/common/components/Tooltip';
 import Switch from 'flarum/common/components/Switch';
 import icon from 'flarum/common/helpers/icon';
+import ItemList from 'flarum/common/utils/ItemList';
 
 export default class HorizonStatsWidget extends DashboardWidget {
   loading = true;
@@ -108,6 +109,12 @@ export default class HorizonStatsWidget extends DashboardWidget {
         {this.renderStat(app.translator.trans('blomstra-horizon.admin.stats.data.redis-used-memory'), redis_stats.memory_used)}
         {this.renderStat(app.translator.trans('blomstra-horizon.admin.stats.data.redis-peak-memory'), redis_stats.memory_peak)}
         {this.renderStat(app.translator.trans('blomstra-horizon.admin.stats.data.redis-max-memory'), redis_stats.memory_max ?? 'auto')}
+        {this.renderStat(
+          app.translator.trans('blomstra-horizon.admin.stats.data.redis-memory-policy'),
+          redis_stats.memory_max_policy,
+          app.translator.trans('blomstra-horizon.admin.stats.data.redis-memory-policy-tooltip'),
+          'https://redis.io/docs/latest/develop/reference/eviction/'
+        )}
         {this.renderStat(app.translator.trans('blomstra-horizon.admin.stats.data.redis-cpu-user'), redis_stats.cpu_user + '%')}
         {this.renderStat(app.translator.trans('blomstra-horizon.admin.stats.data.redis-cpu-sys'), redis_stats.cpu_sys + '%')}
         {this.renderStat(app.translator.trans('blomstra-horizon.admin.stats.data.jobs-per-minute'), jobsPerMinute)}
@@ -121,13 +128,53 @@ export default class HorizonStatsWidget extends DashboardWidget {
     );
   }
 
-  renderStat(label: NestedStringArray, value: string) {
-    return (
-      <div className="HorizonStatsWidget-stat">
-        <small>{label}</small>
-        <p>{value || !this.loading ? value : <LoadingIndicator size="small" display="inline" />}</p>
-      </div>
-    );
+  renderStat(
+    label: NestedStringArray | string,
+    value: string,
+    infoLabel: NestedStringArray | string | undefined = undefined,
+    infoUrl: string | undefined = undefined
+  ) {
+    return <div className="HorizonStatsWidget-stat">{this.statItems(label, value, infoLabel, infoUrl).toArray()}</div>;
+  }
+
+  statItems(
+    label: NestedStringArray | string,
+    value: string,
+    infoLabel: NestedStringArray | string | undefined,
+    infoUrl: string | undefined
+  ): ItemList<Mithril.Children> {
+    const items = new ItemList<Mithril.Children>();
+
+    items.add('label', <small>{this.labelItems(label, infoLabel, infoUrl).toArray()}</small>, 100);
+
+    items.add('value', <p>{value || !this.loading ? value : <LoadingIndicator size="small" display="inline" />}</p>, 80);
+
+    return items;
+  }
+
+  labelItems(
+    label: NestedStringArray | string,
+    infoLabel: NestedStringArray | string | undefined,
+    infoUrl: string | undefined
+  ): ItemList<Mithril.Children> {
+    const items = new ItemList<Mithril.Children>();
+
+    items.add('label', <span>{label}</span>, 100);
+
+    if (infoLabel && infoUrl) {
+      items.add(
+        'info',
+        <Tooltip text={infoLabel}>
+          <span>
+            {' '}
+            <LinkButton href={infoUrl} external={true} target="_blank" icon="fas fa-info-circle" />
+          </span>
+        </Tooltip>,
+        90
+      );
+    }
+
+    return items;
   }
 
   renderStatusIndicator(status: string | null) {
